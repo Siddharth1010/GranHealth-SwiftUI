@@ -8,6 +8,7 @@
 
 import SwiftUI
 import Firebase
+import SwiftUICharts
 
 struct HeartRate: View {
     
@@ -25,61 +26,48 @@ struct HeartRate: View {
           
         VStack{
             
+            LineView(data: self.HRValues, title: "Heart Rate", legend: "Past Month")
+            
             Text("This is the heart rate page")
             HStack{
             Text("\(self.HRValues)" as String)
             }
             Text("\(self.HRDates)" as String)
             
+            
         }.onAppear(){
             
-            if let user = Auth.auth().currentUser?.email {
+            self.getHRValues()
+            
+        }
+    }
+    
+    func getHRValues() {
+        if let user = Auth.auth().currentUser?.email {
 
-                self.db.collection(user).getDocuments { (querySnapshot, error) in
-                    if let e = error {
-                        print("Heart Rate values could not be retreived from firestore: \(e)")
-                    } else {
-                        if let snapshotDocs = querySnapshot?.documents {
-                            for doc in snapshotDocs {
-                                if doc.documentID == "HeartRate"{
-                                    print(doc.data()["HeartRateValues"]! as! [Double])
-                                    let timestamp: [Timestamp] = doc.data()["HeartRateDates"]! as! [Timestamp]
-                                    var dates: [Date] = []
-                                    for time in timestamp{
-                                        dates.append(time.dateValue())
-                                    }
-                                    print(dates)
-                                    self.HRValues = doc.data()["HeartRateValues"]! as! [Double]
-                                    self.HRDates = dates
+            self.db.collection(user).getDocuments { (querySnapshot, error) in
+                if let e = error {
+                    print("Heart Rate values could not be retreived from firestore: \(e)")
+                } else {
+                    if let snapshotDocs = querySnapshot?.documents {
+                        for doc in snapshotDocs {
+                            if doc.documentID == "HeartRate"{
+                                print(doc.data()["HeartRateValues"]! as! [Double])
+                                let timestamp: [Timestamp] = doc.data()["HeartRateDates"]! as! [Timestamp]
+                                var dates: [Date] = []
+                                for time in timestamp{
+                                    dates.append(time.dateValue())
                                 }
+                                print(dates)
+                                self.HRValues = doc.data()["HeartRateValues"]! as! [Double]
+                                self.HRDates = dates
                             }
                         }
                     }
                 }
             }
-            
         }
     }
     
-//    func getHRValues() {
-//
-//
-//        if let user = Auth.auth().currentUser?.email {
-//
-//            self.db.collection(user).getDocuments { (querySnapshot, error) in
-//                if let e = error {
-//                    print("Heart Rate values could not be retreived from firestore: \(e)")
-//                } else {
-//                    if let snapshotDocs = querySnapshot?.documents {
-//                        for doc in snapshotDocs {
-//                            if doc.documentID == "HeartRate"{
-//                                print(doc.data()["HeartRateValues"]! as! [Double])
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//
-//    }
+
 }

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -32,6 +32,7 @@
 		F082B5FA25DFD2AE007EC86A /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = F082B5F925DFD2AE007EC86A /* Location.swift */; };
 		F082B5FC25DFE46F007EC86A /* HomescreenRecipient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F082B5FB25DFE46F007EC86A /* HomescreenRecipient.swift */; };
 		F082B5FF25E10B0D007EC86A /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F082B5FE25E10B0D007EC86A /* HealthKit.framework */; };
+		F082B60225E2316B007EC86A /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = F082B60125E2316B007EC86A /* SwiftUICharts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F082B60225E2316B007EC86A /* SwiftUICharts in Frameworks */,
 				B801AFCFC27BC787AC824D4B /* Pods_GranHealth.framework in Frameworks */,
 				F082B5FF25E10B0D007EC86A /* HealthKit.framework in Frameworks */,
 			);
@@ -182,6 +184,9 @@
 			dependencies = (
 			);
 			name = GranHealth;
+			packageProductDependencies = (
+				F082B60125E2316B007EC86A /* SwiftUICharts */,
+			);
 			productName = GranHealth;
 			productReference = F082B5C325DCD61D007EC86A /* GranHealth.app */;
 			productType = "com.apple.product-type.application";
@@ -210,6 +215,9 @@
 				Base,
 			);
 			mainGroup = F082B5BA25DCD61D007EC86A;
+			packageReferences = (
+				F082B60025E2316B007EC86A /* XCRemoteSwiftPackageReference "ChartView" */,
+			);
 			productRefGroup = F082B5C425DCD61D007EC86A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -496,6 +504,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F082B60025E2316B007EC86A /* XCRemoteSwiftPackageReference "ChartView" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AppPear/ChartView";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.5.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F082B60125E2316B007EC86A /* SwiftUICharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F082B60025E2316B007EC86A /* XCRemoteSwiftPackageReference "ChartView" */;
+			productName = SwiftUICharts;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F082B5BB25DCD61D007EC86A /* Project object */;
 }
