@@ -27,16 +27,24 @@ struct Home : View {
     @State var show = false
     @State var status = UserDefaults.standard.value(forKey: "status") as? Bool ?? false
     
+    @State var flag: Int = 0
+    @State var email: String = ""
+    
     var body: some View{
         
         NavigationView{
             
             VStack{
                 
-                if self.status{
+                if self.status && self.flag == 1{
                     
-                    Homescreen()
+                    HomescreenUser(email: self.email)
                 }
+                    
+                else if self.status && self.flag == 2{
+                        
+                    HomescreenRecipient(email: self.email)
+                    }
                 else{
                     
                     ZStack{
@@ -47,7 +55,7 @@ struct Home : View {
                         }
                         .hidden()
                         
-                        Login(show: self.$show)
+                        Login(show: self.$show, flag: self.$flag, email: self.$email)
                     }
                 }
             }
@@ -68,9 +76,10 @@ struct Home : View {
 }
 
 
-struct Homescreen : View {
+struct HomescreenUser : View {
     
     @State var show = false
+    @State var email: String
     
     var body: some View{
         
@@ -165,12 +174,15 @@ struct MainView : View {
 struct Login : View {
     
     @State var color = Color.black.opacity(0.7)
-    @State var email = ""
+//    @State var email = ""
+    
     @State var pass = ""
     @State var visible = false
     @Binding var show : Bool
     @State var alert = false
     @State var error = ""
+    @Binding var flag: Int
+    @Binding var email: String
     
     var body: some View{
         
@@ -250,7 +262,7 @@ struct Login : View {
                 
             }) {
                 
-                Text("Log In")
+                Text("Log In As User")
                     .foregroundColor(.white)
                     .padding(.vertical)
                     .frame(width: UIScreen.main.bounds.width - 50)
@@ -259,6 +271,23 @@ struct Login : View {
             .background(Color("Color"))
             .cornerRadius(10)
             .padding(.top, 25)
+            
+            
+            Button(action: {
+                
+                self.verify2()
+                
+            }) {
+                
+                Text("Log In As Recipient")
+                    .foregroundColor(.white)
+                    .padding(.vertical)
+                    .frame(width: UIScreen.main.bounds.width - 50)
+                    
+            }
+            .background(Color("Color"))
+            .cornerRadius(10)
+            .padding(.top, 15)
             
             
         }  // Main Vertical Stack ends
@@ -310,6 +339,37 @@ struct Login : View {
                 }
                 
                 print("Sucessfully logged in")
+                
+                self.flag = 1
+                
+                UserDefaults.standard.set(true, forKey: "status")
+                NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
+                
+            }
+        }
+        else{
+            self.error = "Please fill the required fields"
+            self.alert.toggle()
+        }
+    }
+    
+    
+    func verify2() {
+        
+        if self.email != "" && self.pass != "" {
+            
+            Auth.auth().signIn(withEmail: self.email, password: self.pass) { (res, err) in
+                
+                if err != nil{
+                    
+                    self.error = err!.localizedDescription
+                    self.alert.toggle()
+                    return
+                }
+                
+                print("Sucessfully logged in")
+                
+                self.flag = 2
                 
                 UserDefaults.standard.set(true, forKey: "status")
                 NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
@@ -388,11 +448,15 @@ struct SignUp : View {
                             .foregroundColor(self.color)
                             .padding(.top, 35)
                         
+                        HStack(spacing: 15){
+                        
                         TextField("Email", text: self.$email)
                         .autocapitalization(.none)
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 4).stroke(self.email != "" ? Color("Color") : self.color,lineWidth: 2))
                         .padding(.top, 25)
+                        
+                    }
                         
                         
                         HStack(spacing: 15){
@@ -513,10 +577,20 @@ struct SignUp : View {
                         return
                     }
                     
-                    print("Successfully registered and logged in")
+                    print("Successfully registered")
                     
-                    UserDefaults.standard.set(true, forKey: "status")
-                    NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
+//                    UserDefaults.standard.set(true, forKey: "status")
+//                    NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
+                    
+                    self.error = "Register Confirmed"
+                    self.alert.toggle()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
+                       // Code you want to be delayed
+                        self.show.toggle()
+                    }
+                    
+                    
+                    
                 }
             }
             else{

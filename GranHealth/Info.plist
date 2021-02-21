@@ -20,6 +20,10 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Access Health data for GranHealth application</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>Access Health data for Granhealth application</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

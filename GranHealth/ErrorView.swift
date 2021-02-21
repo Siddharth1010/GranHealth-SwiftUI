@@ -23,19 +23,41 @@ struct ErrorView : View {
                 
                 HStack{
                     
+                    if self.error != "Register Confirmed"{
+                    
                     Text(self.error == "Password Reset" ? "Message" : "Error")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(self.color)
+                    }
+                    else{
+                        
+                        Text("Message")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .foregroundColor(self.color)
+                        
+                    }
                     
                     Spacer()
                 }
                 .padding(.horizontal, 25)
                 
+                if self.error != "Register Confirmed"{
+                
                 Text(self.error == "Password Reset" ? "Password reset link has been sent successfully" : self.error)
                     .foregroundColor(self.color)
                     .padding(.top)
                     .padding(.horizontal, 25)
+                    
+                }
+                else{
+                    Text("Registered Successfully. Please log in as a user")
+                    .foregroundColor(self.color)
+                    .padding(.top)
+                    .padding(.horizontal, 25)
+                    
+                }
                 
                 Button(action: {
                     

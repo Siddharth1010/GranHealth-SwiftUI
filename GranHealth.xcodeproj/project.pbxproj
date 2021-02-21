@@ -23,6 +23,15 @@
 		F082B5E725DEF1F0007EC86A /* HealthItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F082B5E625DEF1F0007EC86A /* HealthItem.swift */; };
 		F082B5E925DEF5B5007EC86A /* HealthRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F082B5E825DEF5B5007EC86A /* HealthRow.swift */; };
 		F082B5EB25DF0FAE007EC86A /* HealthDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = F082B5EA25DF0FAE007EC86A /* HealthDetail.swift */; };
+		F082B5ED25DFCE53007EC86A /* HeartRate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F082B5EC25DFCE53007EC86A /* HeartRate.swift */; };
+		F082B5F025DFCF9F007EC86A /* Steps.swift in Sources */ = {isa = PBXBuildFile; fileRef = F082B5EF25DFCF9F007EC86A /* Steps.swift */; };
+		F082B5F225DFD0F1007EC86A /* Distance.swift in Sources */ = {isa = PBXBuildFile; fileRef = F082B5F125DFD0F1007EC86A /* Distance.swift */; };
+		F082B5F425DFD15B007EC86A /* Flights.swift in Sources */ = {isa = PBXBuildFile; fileRef = F082B5F325DFD15B007EC86A /* Flights.swift */; };
+		F082B5F625DFD1EE007EC86A /* StepLength.swift in Sources */ = {isa = PBXBuildFile; fileRef = F082B5F525DFD1EE007EC86A /* StepLength.swift */; };
+		F082B5F825DFD244007EC86A /* WalkingSpeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = F082B5F725DFD244007EC86A /* WalkingSpeed.swift */; };
+		F082B5FA25DFD2AE007EC86A /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = F082B5F925DFD2AE007EC86A /* Location.swift */; };
+		F082B5FC25DFE46F007EC86A /* HomescreenRecipient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F082B5FB25DFE46F007EC86A /* HomescreenRecipient.swift */; };
+		F082B5FF25E10B0D007EC86A /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F082B5FE25E10B0D007EC86A /* HealthKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +55,16 @@
 		F082B5E625DEF1F0007EC86A /* HealthItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthItem.swift; sourceTree = "<group>"; };
 		F082B5E825DEF5B5007EC86A /* HealthRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRow.swift; sourceTree = "<group>"; };
 		F082B5EA25DF0FAE007EC86A /* HealthDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthDetail.swift; sourceTree = "<group>"; };
+		F082B5EC25DFCE53007EC86A /* HeartRate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartRate.swift; sourceTree = "<group>"; };
+		F082B5EF25DFCF9F007EC86A /* Steps.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Steps.swift; sourceTree = "<group>"; };
+		F082B5F125DFD0F1007EC86A /* Distance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Distance.swift; sourceTree = "<group>"; };
+		F082B5F325DFD15B007EC86A /* Flights.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flights.swift; sourceTree = "<group>"; };
+		F082B5F525DFD1EE007EC86A /* StepLength.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepLength.swift; sourceTree = "<group>"; };
+		F082B5F725DFD244007EC86A /* WalkingSpeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkingSpeed.swift; sourceTree = "<group>"; };
+		F082B5F925DFD2AE007EC86A /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		F082B5FB25DFE46F007EC86A /* HomescreenRecipient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomescreenRecipient.swift; sourceTree = "<group>"; };
+		F082B5FD25E10B0D007EC86A /* GranHealth.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GranHealth.entitlements; sourceTree = "<group>"; };
+		F082B5FE25E10B0D007EC86A /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +73,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B801AFCFC27BC787AC824D4B /* Pods_GranHealth.framework in Frameworks */,
+				F082B5FF25E10B0D007EC86A /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +83,7 @@
 		0A6F76B32F083E81C31523D8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F082B5FE25E10B0D007EC86A /* HealthKit.framework */,
 				53B740530A0C985A4D0F459D /* Pods_GranHealth.framework */,
 			);
 			name = Frameworks;
@@ -98,10 +119,13 @@
 		F082B5C525DCD61D007EC86A /* GranHealth */ = {
 			isa = PBXGroup;
 			children = (
+				F082B5FD25E10B0D007EC86A /* GranHealth.entitlements */,
 				F082B5C625DCD61D007EC86A /* AppDelegate.swift */,
 				F082B5C825DCD61D007EC86A /* SceneDelegate.swift */,
 				F082B5CA25DCD61D007EC86A /* ContentView.swift */,
+				F082B5FB25DFE46F007EC86A /* HomescreenRecipient.swift */,
 				F082B5EA25DF0FAE007EC86A /* HealthDetail.swift */,
+				F082B5EE25DFCE77007EC86A /* MainTemplates */,
 				F082B5E825DEF5B5007EC86A /* HealthRow.swift */,
 				F082B5E625DEF1F0007EC86A /* HealthItem.swift */,
 				F082B5DE25DECA08007EC86A /* ProfileView.swift */,
@@ -124,6 +148,20 @@
 				F082B5CF25DCD61F007EC86A /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		F082B5EE25DFCE77007EC86A /* MainTemplates */ = {
+			isa = PBXGroup;
+			children = (
+				F082B5EC25DFCE53007EC86A /* HeartRate.swift */,
+				F082B5EF25DFCF9F007EC86A /* Steps.swift */,
+				F082B5F125DFD0F1007EC86A /* Distance.swift */,
+				F082B5F325DFD15B007EC86A /* Flights.swift */,
+				F082B5F525DFD1EE007EC86A /* StepLength.swift */,
+				F082B5F725DFD244007EC86A /* WalkingSpeed.swift */,
+				F082B5F925DFD2AE007EC86A /* Location.swift */,
+			);
+			path = MainTemplates;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -243,16 +281,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F082B5FC25DFE46F007EC86A /* HomescreenRecipient.swift in Sources */,
 				F082B5E925DEF5B5007EC86A /* HealthRow.swift in Sources */,
 				F082B5E725DEF1F0007EC86A /* HealthItem.swift in Sources */,
 				F082B5EB25DF0FAE007EC86A /* HealthDetail.swift in Sources */,
 				F082B5C725DCD61D007EC86A /* AppDelegate.swift in Sources */,
+				F082B5F225DFD0F1007EC86A /* Distance.swift in Sources */,
+				F082B5FA25DFD2AE007EC86A /* Location.swift in Sources */,
 				F082B5E325DEEDC3007EC86A /* Data.swift in Sources */,
 				F082B5C925DCD61D007EC86A /* SceneDelegate.swift in Sources */,
+				F082B5ED25DFCE53007EC86A /* HeartRate.swift in Sources */,
 				F082B5DF25DECA08007EC86A /* ProfileView.swift in Sources */,
 				F082B5E525DEEFF4007EC86A /* Health.swift in Sources */,
+				F082B5F625DFD1EE007EC86A /* StepLength.swift in Sources */,
+				F082B5F825DFD244007EC86A /* WalkingSpeed.swift in Sources */,
+				F082B5F025DFCF9F007EC86A /* Steps.swift in Sources */,
 				F082B5CB25DCD61D007EC86A /* ContentView.swift in Sources */,
 				F082B5DD25DD9BF3007EC86A /* ErrorView.swift in Sources */,
+				F082B5F425DFD15B007EC86A /* Flights.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -389,6 +435,7 @@
 			baseConfigurationReference = E0207D83220E3ABAA5708548 /* Pods-GranHealth.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = GranHealth/GranHealth.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"GranHealth/Preview Content\"";
 				DEVELOPMENT_TEAM = 3RKRAF5YY8;
@@ -410,6 +457,7 @@
 			baseConfigurationReference = 4B69B5F4A8B2448C3BF2CC40 /* Pods-GranHealth.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = GranHealth/GranHealth.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"GranHealth/Preview Content\"";
 				DEVELOPMENT_TEAM = 3RKRAF5YY8;
