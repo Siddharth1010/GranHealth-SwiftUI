@@ -29,6 +29,8 @@ struct HRModal: View {
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
+                .padding()
+            .padding(.leading, 3)
                 
             
             HStack(spacing: 15){
@@ -66,21 +68,90 @@ struct HRModal: View {
                         Text(abhrdata.hrdate)
                             .font(Font.system(size: 10))
                             .multilineTextAlignment(.leading)
-                            .lineLimit(2)
+                            .lineLimit(3)
                             .foregroundColor(.primary)
                     }
                 }
+            
             }
-        
-        }
             .padding()
-            .background(Color.white.opacity(0.6))
+            .background(Color.black.opacity(0.25))
+            .frame(height: 300)
             .cornerRadius(10)
             .padding()
-                .onAppear(){
+            
+            VStack{
+                Text("Statistics")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.black)
+//                    .padding()
+                    .padding(.leading, 20)
+                    .padding(.bottom, 8)
+            }
+            
+            VStack{
+                
+                HStack(alignment: .top){
+                                
+                    Text("Average Abnormal:")
+                        .foregroundColor(.white)
+                        .padding(.vertical,3)
+                    //                .frame(width: UIScreen.main.bounds.width - 50)
+                    Spacer()
+                    
+                    Text(String(format: "%.2f", self.HRValues.reduce(0, +) / Double(self.HRValues.count) ) + " BPM")
+                        .foregroundColor(.white)
+                        .padding(.vertical,3)
+                    //                .frame(width: UIScreen.main.bounds.width - 50)
+                }
+                .padding()
+                .frame(width: UIScreen.main.bounds.width - 10)
+                .background(Color.blue)
+                .cornerRadius(10)
+                .padding(.bottom, 30)
+                
+                
+                HStack(alignment: .top){
+                                
+                    Text("Highest Abnormal:")
+                        .foregroundColor(.white)
+                        .padding(.vertical,3)
+                    //                .frame(width: UIScreen.main.bounds.width - 50)
+                    Spacer()
+                    
+                    Text(String(format: "%.2f", self.HRValues.max()!) + " BPM")
+                        .foregroundColor(.white)
+                        .padding(.vertical,3)
+                    //                .frame(width: UIScreen.main.bounds.width - 50)
+                }
+                .padding()
+                .frame(width: UIScreen.main.bounds.width - 10)
+                .background(Color.blue)
+                .cornerRadius(10)
+                
+                Text("Recorded on: \(self.HRDates[self.HRValues.firstIndex(of: self.HRValues.max()!)!])")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .frame(height: 40)
+                .padding()
+
+                
+                
+                
+            }
+        .padding()
+            
+        
+        }.onAppear(){
             self.getHRValues()
         }
-    }
+        
+        
+        
+            }
     
     func getHRValues(){
         
