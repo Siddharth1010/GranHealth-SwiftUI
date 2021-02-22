@@ -38,7 +38,8 @@ struct HealthRow: View {
                     
         
                     
-                }.simultaneousGesture(TapGesture().onEnded{
+                }
+                .simultaneousGesture(TapGesture().onEnded{
 //                    self.isActive = true
 //                    self.isActive.toggle()
                     print(self.isActive)

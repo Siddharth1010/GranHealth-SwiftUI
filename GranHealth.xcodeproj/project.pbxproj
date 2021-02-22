@@ -33,6 +33,7 @@
 		F082B5FC25DFE46F007EC86A /* HomescreenRecipient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F082B5FB25DFE46F007EC86A /* HomescreenRecipient.swift */; };
 		F082B5FF25E10B0D007EC86A /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F082B5FE25E10B0D007EC86A /* HealthKit.framework */; };
 		F082B60225E2316B007EC86A /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = F082B60125E2316B007EC86A /* SwiftUICharts */; };
+		F082B60425E29558007EC86A /* HRModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F082B60325E29558007EC86A /* HRModal.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		F082B5FB25DFE46F007EC86A /* HomescreenRecipient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomescreenRecipient.swift; sourceTree = "<group>"; };
 		F082B5FD25E10B0D007EC86A /* GranHealth.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GranHealth.entitlements; sourceTree = "<group>"; };
 		F082B5FE25E10B0D007EC86A /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		F082B60325E29558007EC86A /* HRModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HRModal.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -162,6 +164,7 @@
 				F082B5F525DFD1EE007EC86A /* StepLength.swift */,
 				F082B5F725DFD244007EC86A /* WalkingSpeed.swift */,
 				F082B5F925DFD2AE007EC86A /* Location.swift */,
+				F082B60325E29558007EC86A /* HRModal.swift */,
 			);
 			path = MainTemplates;
 			sourceTree = "<group>";
@@ -303,6 +306,7 @@
 				F082B5E525DEEFF4007EC86A /* Health.swift in Sources */,
 				F082B5F625DFD1EE007EC86A /* StepLength.swift in Sources */,
 				F082B5F825DFD244007EC86A /* WalkingSpeed.swift in Sources */,
+				F082B60425E29558007EC86A /* HRModal.swift in Sources */,
 				F082B5F025DFCF9F007EC86A /* Steps.swift in Sources */,
 				F082B5CB25DCD61D007EC86A /* ContentView.swift in Sources */,
 				F082B5DD25DD9BF3007EC86A /* ErrorView.swift in Sources */,

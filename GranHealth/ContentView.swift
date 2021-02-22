@@ -27,7 +27,8 @@ struct Home : View {
     @State var show = false
     @State var status = UserDefaults.standard.value(forKey: "status") as? Bool ?? false
     
-    @State var flag: Int = 0
+    @State var flag = UserDefaults.standard.value(forKey: "flag") as? Int ?? 0
+//    @State var flag: Int = 0
     @State var email: String = ""
     
     var body: some View{
@@ -55,7 +56,7 @@ struct Home : View {
                         }
                         .hidden()
                         
-                        Login(show: self.$show, flag: self.$flag, email: self.$email)
+                        Login(show: self.$show, email: self.$email)
                     }
                 }
             }
@@ -68,7 +69,12 @@ struct Home : View {
                 NotificationCenter.default.addObserver(forName: NSNotification.Name("status"), object: nil, queue: .main) { (_) in
 
                     self.status = UserDefaults.standard.value(forKey: "status") as? Bool ?? false
-
+                    
+                }
+                
+                NotificationCenter.default.addObserver(forName: NSNotification.Name("flag"), object: nil, queue: .main) { (_) in
+                
+                self.flag = UserDefaults.standard.value(forKey: "flag") as? Int ?? 0
                 }
             }
         }
@@ -181,7 +187,6 @@ struct Login : View {
     @Binding var show : Bool
     @State var alert = false
     @State var error = ""
-    @Binding var flag: Int
     @Binding var email: String
     
     var body: some View{
@@ -262,7 +267,7 @@ struct Login : View {
                 
             }) {
                 
-                Text("Log In As User")
+                Text("Log In as User")
                     .foregroundColor(.white)
                     .padding(.vertical)
                     .frame(width: UIScreen.main.bounds.width - 50)
@@ -279,7 +284,7 @@ struct Login : View {
                 
             }) {
                 
-                Text("Log In As Recipient")
+                Text("Log In as Elder")
                     .foregroundColor(.white)
                     .padding(.vertical)
                     .frame(width: UIScreen.main.bounds.width - 50)
@@ -340,8 +345,9 @@ struct Login : View {
                 
                 print("Sucessfully logged in")
                 
-                self.flag = 1
-                
+//                self.flag = 1
+                UserDefaults.standard.set(1,forKey: "flag")
+                NotificationCenter.default.post(name: NSNotification.Name("flag"), object: nil)
                 UserDefaults.standard.set(true, forKey: "status")
                 NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
                 
@@ -369,8 +375,9 @@ struct Login : View {
                 
                 print("Sucessfully logged in")
                 
-                self.flag = 2
-                
+//                self.flag = 2
+                UserDefaults.standard.set(2,forKey: "flag")
+                NotificationCenter.default.post(name: NSNotification.Name("flag"), object: nil)
                 UserDefaults.standard.set(true, forKey: "status")
                 NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
                 
