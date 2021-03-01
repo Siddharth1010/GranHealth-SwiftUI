@@ -29,8 +29,8 @@ struct HRModal: View {
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
-                .padding()
-            .padding(.leading, 3)
+//                .padding()
+            .padding(.leading, 20)
                 
             
             HStack(spacing: 15){
@@ -65,7 +65,7 @@ struct HRModal: View {
                             }
                         }
                         
-                        Text(abhrdata.hrdate)
+                        Text(abhrdata.hrdate.components(separatedBy: " ")[0])
                             .font(Font.system(size: 10))
                             .multilineTextAlignment(.leading)
                             .lineLimit(3)
@@ -75,7 +75,8 @@ struct HRModal: View {
             
             }
             .padding()
-            .background(Color.black.opacity(0.25))
+            .background(Color.black.opacity(0.05))
+            .shadow(color: Color.black.opacity(0.15), radius: 10, x: 10, y: 10)
             .frame(height: 300)
             .cornerRadius(10)
             .padding()

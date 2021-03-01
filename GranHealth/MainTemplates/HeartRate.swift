@@ -53,6 +53,7 @@ struct HeartRate: View {
             }
             .padding()
             .background(Color.blue)
+            .frame(width: UIScreen.main.bounds.width - 10)
             .cornerRadius(10)
             .padding(.bottom, 30)
             
@@ -61,7 +62,6 @@ struct HeartRate: View {
                         Text("Latest Heart Rate:")
                             .foregroundColor(.white)
                             .padding(.vertical,3)
-            //                .frame(width: UIScreen.main.bounds.width - 50)
                     Spacer()
 //                Text("\(self.HRValues[self.HRValues.count-1]) BPM")
                 Text(String(format: "%.2f", self.HRValues[self.HRValues.count-1]) + " BPM")
@@ -70,6 +70,7 @@ struct HeartRate: View {
             //                .frame(width: UIScreen.main.bounds.width - 50)
                         }
                         .padding()
+                        .frame(width: UIScreen.main.bounds.width - 10)
                         .background(Color.blue)
                         .cornerRadius(10)
                 Text("Last recorded on: \(self.HRDates[self.HRDates.count - 1])")

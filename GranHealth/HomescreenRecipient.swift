@@ -74,16 +74,145 @@ struct HomescreenRecipient: View {
 
     func authorizeHealthKit(){
         
-        let read = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!])
-        let share = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!])
+        var read = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!])
+        var share = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!])
         healthStore.requestAuthorization(toShare: share, read: read) { (chk,error) in
             if(chk){
-                print("permission granted")
+                print("permission granted - Heart Rate")
                 self.latestHeartRate()
             }
+        }
+            
+        read = Set([HKObjectType.quantityType(forIdentifier: .stepCount)!])
+        share = Set([HKObjectType.quantityType(forIdentifier: .stepCount)!])
+        healthStore.requestAuthorization(toShare: share, read: read) { (chk,error) in
+            if(chk){
+                print("permission granted - Step Count")
+                self.latestSteps()
+            }
+            }
+            
+            
+        
+    }
+    
+    func latestSteps(){
+        guard let sampleType = HKObjectType.quantityType(forIdentifier: .stepCount) else {
+            return
+        }
+        
+        let startDate = Calendar.current.date(byAdding: .month, value: -1, to: Date())
+        
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: Date(), options: .strictEndDate)
+        
+        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
+        
+        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: [sortDescriptor]) { (sample, result, error) in
+            
+            guard error == nil else{
+                return
+            }
+            
+//            let data = result
+//            print(data)
+            
+            var tempsteps: [Double] = []
+            var tempdates: [Date] = []
+            var tempdatesString: [String] = []
+            let data = result!
+            let unit = HKUnit(from: "count")
+            let dateFormator = DateFormatter()
+            dateFormator.dateFormat = "dd/MM/yyyy"
+            
+            for index in data{
+                
+                let dataval = index as! HKQuantitySample
+                let hr2 = dataval.quantity.doubleValue(for: unit)
+                tempsteps.append(hr2)
+                let startdate = dataval.startDate
+                let calendarDate = Calendar.current.dateComponents([.day, .year, .month], from: startdate)
+                tempdatesString.append("\(calendarDate.day!)/\(calendarDate.month!)/\(calendarDate.year!)")
+                tempdates.append(startdate)
+                
+            }
+            
+            tempsteps.reverse()
+            tempdates.reverse()
+            tempdatesString.reverse()
+            print(tempsteps)
+            print(tempdates)
+            print(tempdatesString)
+            
+            var steps: [Double] = []
+            var dates: [Date] = []
+            
+            var sum: Double = 0
+            var date = Date()
+            for i in 0..<tempsteps.count {
+                if i != tempsteps.count-1 {
+                if tempdatesString[i] == tempdatesString[i+1] {
+                    sum+=tempsteps[i]
+                    date = tempdates[i]
+                }
+                else{
+                    sum+=tempsteps[i]
+                    date = tempdates[i]
+                    steps.append(sum)
+                    dates.append(date)
+                    sum = 0
+                    date = Date()
+                }
+                }
+                else{
+                    if tempdatesString[i] == tempdatesString[i-1] {
+                        sum+=tempsteps[i]
+                        date = tempdates[i]
+                        steps.append(sum)
+                        dates.append(date)
+                        sum = 0
+                        date = Date()
+                    }
+                    else{
+                        sum = tempsteps[i]
+                        date = tempdates[i]
+                        steps.append(sum)
+                        dates.append(date)
+                        sum = 0
+                        date = Date()
+                    }
+                
+                }
+            }
+            
+            print(steps)
+            print(dates)
+            
+            if let user = Auth.auth().currentUser?.email {
+                
+                
+                self.db.collection(user).document("StepCount").setData([
+                    "StepCountValues": steps,
+                    "StepCountDates": dates
+                ]) { err in
+                    if let err = err{
+                        print("Issue saving StepCount data to Firestore: \(err)")
+                    } else {
+                        print("Successfully saved StepCount data to Firestore")
+                    }
+                    
+                }
+            }
+            
+            
+            
+           
             
         }
+        
+        healthStore.execute(query)
     }
+    
+    
     
     func latestHeartRate(){
         
@@ -167,6 +296,7 @@ struct HomescreenRecipient: View {
         }
         
         healthStore.execute(query)
+        return
     }
 }
 
