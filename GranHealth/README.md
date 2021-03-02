@@ -14,10 +14,21 @@ Apple Watches are equipped with sensors that measure parameters such as Heart Ra
 
 ## Interface
 
+### Log In and Home Page
 
 <p float="left">
 <img width="388" alt="Screenshot 2021-03-02 at 9 24 36 PM" src="https://user-images.githubusercontent.com/59433969/109678113-52426980-7ba0-11eb-934d-c6922348f81a.png">
 
 
 <img align="right" width="388" alt="Screenshot 2021-03-02 at 9 28 27 PM" src="https://user-images.githubusercontent.com/59433969/109677059-4a35fa00-7b9f-11eb-9a68-dfa2a53f4e71.png">
+</p>
+
+### Heart Rate and Map
+
+<p float ="left">
+
+<img width="388" alt="Screenshot 2021-03-02 at 9 29 33 PM" src="https://user-images.githubusercontent.com/59433969/109678739-ead8e980-7ba0-11eb-9fe8-55c9e6933588.png">
+
+<img align="right" width="388" alt="Screenshot 2021-03-02 at 9 30 32 PM" src="https://user-images.githubusercontent.com/59433969/109678839-080db800-7ba1-11eb-8562-cbe2097a2c70.png">
+
 </p>
