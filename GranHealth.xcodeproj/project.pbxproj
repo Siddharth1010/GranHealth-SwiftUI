@@ -34,6 +34,7 @@
 		F082B5FF25E10B0D007EC86A /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F082B5FE25E10B0D007EC86A /* HealthKit.framework */; };
 		F082B60225E2316B007EC86A /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = F082B60125E2316B007EC86A /* SwiftUICharts */; };
 		F082B60425E29558007EC86A /* HRModal.swift in Sources */ = {isa = PBXBuildFile; fileRef = F082B60325E29558007EC86A /* HRModal.swift */; };
+		F082B60925EE894B007EC86A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = F082B60825EE894A007EC86A /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,7 @@
 		F082B5FD25E10B0D007EC86A /* GranHealth.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GranHealth.entitlements; sourceTree = "<group>"; };
 		F082B5FE25E10B0D007EC86A /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		F082B60325E29558007EC86A /* HRModal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HRModal.swift; sourceTree = "<group>"; };
+		F082B60825EE894A007EC86A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +141,7 @@
 				F082B5E225DEEDC3007EC86A /* Data.swift */,
 				F082B5E425DEEFF4007EC86A /* Health.swift */,
 				F082B5D125DCD61F007EC86A /* LaunchScreen.storyboard */,
+				F082B60825EE894A007EC86A /* README.md */,
 				F082B5D425DCD61F007EC86A /* Info.plist */,
 				F082B5DA25DD611D007EC86A /* GoogleService-Info.plist */,
 				F082B5CE25DCD61F007EC86A /* Preview Content */,
@@ -235,6 +238,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F082B60925EE894B007EC86A /* README.md in Resources */,
 				F082B5D325DCD61F007EC86A /* LaunchScreen.storyboard in Resources */,
 				F082B5DB25DD611E007EC86A /* GoogleService-Info.plist in Resources */,
 				F082B5E125DEED2F007EC86A /* health.json in Resources */,
