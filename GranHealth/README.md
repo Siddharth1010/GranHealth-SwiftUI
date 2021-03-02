@@ -11,7 +11,8 @@ Almost 70% of senior citizens suffer from Alzheimers and other neurological cond
 Apple Watches are equipped with sensors that measure parameters such as Heart Rate and ECG along with the calculation of fitness data. We extract such data at regular intervals and transfer it to FireStore. This data is accessed by the users iPhone and can be monitored. Data leak will not be a problem as a connection will establish only when both the iPhones are logged in with the same credentials. 
 
 <center>
-![Workflow](https://user-images.githubusercontent.com/59433969/109671108-caf1f780-7b99-11eb-95a7-ee745c441414.png)
+![pasted image 0](https://user-images.githubusercontent.com/59433969/109671108-caf1f780-7b99-11eb-95a7-ee745c441414.png)
+<img src ="https://user-images.githubusercontent.com/59433969/109671108-caf1f780-7b99-11eb-95a7-ee745c441414.png" />
 </center>
 
 ## What you will learn
