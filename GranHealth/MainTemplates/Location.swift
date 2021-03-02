@@ -8,6 +8,7 @@
 import MapKit
 import SwiftUI
 import Firebase
+import Contacts
 
 struct Location: View {
     
@@ -111,22 +112,31 @@ struct MapView: UIViewRepresentable {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
            // Code you want to be delayed
-            let coordinate = self.locationManager.location != nil ? self.locationManager.location!.coordinate : CLLocationCoordinate2D()
+            let coordinateUser = self.locationManager.location != nil ? self.locationManager.location!.coordinate : CLLocationCoordinate2D()
             print("Latitude of elderly: \(self.elderLatitude), Longitude of elderly : \(self.elderLongitude)")
+            let coordinateElder = CLLocationCoordinate2D(latitude: self.elderLatitude, longitude: self.elderLongitude)
+            
             let elderloc = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: self.elderLatitude, longitude: self.elderLongitude))
             
+            let elderloc1 = MapPin(title:"Elder", locationName: "Device Location", coordinate: coordinateElder)
+            let userloc1 = MapPin(title:"User", locationName: "Device Location", coordinate: coordinateUser)
+            
+            
+//            addressDictionary: [String(CNPostalAddressStreetKey): "Elder", String(CNPostalAddress): ""]
 //            let userloc = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: 13.0837, longitude: 80.1750))
-            let userloc = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: coordinate.latitude, longitude: coordinate.longitude))
+            let userloc = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: coordinateUser.latitude, longitude: coordinateUser.longitude))
             
             let request = MKDirections.Request()
             request.source = MKMapItem(placemark: userloc)
+            request.source?.name = "User"
             request.destination = MKMapItem(placemark: elderloc)
+            request.destination?.name = "Elder"
             request.transportType = .automobile
             
             let directions = MKDirections(request: request)
             directions.calculate{ response, error in
                 guard let route = response?.routes.first else { return }
-                mapView.addAnnotations([userloc, elderloc])
+                mapView.addAnnotations([userloc1, elderloc1])
                 mapView.addOverlay(route.polyline)
                 mapView.setVisibleMapRect(route.polyline.boundingMapRect, edgePadding: UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20), animated: true)
                 self.directions = route.steps.map { $0.instructions }.filter { !$0.isEmpty}
@@ -154,5 +164,18 @@ struct MapView: UIViewRepresentable {
     
     
 }
+
+class MapPin: NSObject, MKAnnotation {
+   let title: String?
+   let locationName: String
+   let coordinate: CLLocationCoordinate2D
+init(title: String, locationName: String, coordinate: CLLocationCoordinate2D) {
+      self.title = title
+      self.locationName = locationName
+      self.coordinate = coordinate
+   }
+}
+
+
 
 
