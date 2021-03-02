@@ -199,6 +199,7 @@ struct Steps: View {
                 if let e = error {
                     print("Step values could not be retreived from firestore: \(e)")
                 } else {
+                    self.data = []
                     if let snapshotDocs = querySnapshot?.documents {
                         for doc in snapshotDocs {
                             if doc.documentID == "StepCount"{

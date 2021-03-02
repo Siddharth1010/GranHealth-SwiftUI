@@ -5,21 +5,29 @@
 //  Created by MANI NAIR on 19/02/21.
 //  Copyright © 2021 com.siddharthnair. All rights reserved.
 //
-
+import MapKit
 import SwiftUI
 import Firebase
 import HealthKit
 
 struct HomescreenRecipient: View {
     
+    @ObservedObject private var locationManager = LocationManager()
+
     @State var email: String
-    
+    @State var latitude: CLLocationDegrees = 0
+    @State var longitude: CLLocationDegrees = 0
     let healthStore = HKHealthStore()
     let db = Firestore.firestore()
     
+    
     var body: some View {
         
-        VStack{
+        let coordinate = locationManager.location != nil ? locationManager.location!.coordinate : CLLocationCoordinate2D()
+        
+//        let newlat = CLLocationDegrees(self.latitude)
+        
+        return VStack{
             
             Text("Welcome to the Recipient page")
                 .font(.title)
@@ -27,6 +35,14 @@ struct HomescreenRecipient: View {
                 .foregroundColor(Color.black.opacity(0.7))
             
             Text(self.email)
+            .font(.title)
+            .fontWeight(.bold)
+            .foregroundColor(Color.black.opacity(0.7))
+            .padding(.top,5)
+            
+            
+            
+            Text("\(coordinate.latitude), \(coordinate.longitude)")
             .font(.title)
             .fontWeight(.bold)
             .foregroundColor(Color.black.opacity(0.7))
@@ -70,6 +86,9 @@ struct HomescreenRecipient: View {
             
             
         }
+//        .onAppear(){
+//
+//        }
     }
 
     func authorizeHealthKit(){
@@ -91,8 +110,34 @@ struct HomescreenRecipient: View {
                 self.latestSteps()
             }
             }
+        
+        
+        self.latestLocation()
             
+        
+    }
+    
+    func latestLocation(){
+        
+        self.latitude = self.locationManager.location!.coordinate.latitude
+        self.longitude = self.locationManager.location!.coordinate.longitude
+        
+        if let user = Auth.auth().currentUser?.email {
             
+            print(self.latitude)
+            print(self.longitude)
+            self.db.collection(user).document("LocationCoordinates").setData([
+                "latitude": Double(self.latitude),
+                "longitude": Double(self.longitude)
+            ]) { err in
+                if let err = err{
+                    print("Issue saving StepCount data to Firestore: \(err)")
+                } else {
+                    print("Successfully saved Location data to Firestore")
+                }
+                
+            }
+        }
         
     }
     
@@ -297,6 +342,37 @@ struct HomescreenRecipient: View {
         
         healthStore.execute(query)
         return
+    }
+}
+
+
+
+
+
+class LocationManager: NSObject, ObservableObject {
+    
+    private let locationManager = CLLocationManager()
+    @Published var location: CLLocation? = nil
+    
+    override init() {
+        super.init()
+        self.locationManager.delegate = self
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        self.locationManager.distanceFilter = kCLDistanceFilterNone
+        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.startUpdatingLocation()
+    }
+}
+
+extension LocationManager : CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        guard let location = locations.last else{
+            return
+        }
+        
+        self.location = location
     }
 }
 

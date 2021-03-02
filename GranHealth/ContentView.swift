@@ -8,6 +8,8 @@
 
 import SwiftUI
 import Firebase
+import MapKit
+import HealthKit
 
 struct ContentView: View {
     var body: some View {
