@@ -19,5 +19,5 @@ Apple Watches are equipped with sensors that measure parameters such as Heart Ra
 <img width="388" alt="Screenshot 2021-03-02 at 9 24 36 PM" src="https://user-images.githubusercontent.com/59433969/109678113-52426980-7ba0-11eb-934d-c6922348f81a.png">
 
 
-<img width="388" alt="Screenshot 2021-03-02 at 9 28 27 PM" src="https://user-images.githubusercontent.com/59433969/109677059-4a35fa00-7b9f-11eb-9a68-dfa2a53f4e71.png">
+<img align="right" width="388" alt="Screenshot 2021-03-02 at 9 28 27 PM" src="https://user-images.githubusercontent.com/59433969/109677059-4a35fa00-7b9f-11eb-9a68-dfa2a53f4e71.png">
 </p>
