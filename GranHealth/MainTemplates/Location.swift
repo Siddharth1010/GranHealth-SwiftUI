@@ -116,10 +116,11 @@ struct MapView: UIViewRepresentable {
             print("Latitude of elderly: \(self.elderLatitude), Longitude of elderly : \(self.elderLongitude)")
             let coordinateElder = CLLocationCoordinate2D(latitude: self.elderLatitude, longitude: self.elderLongitude)
             
+            
             let elderloc = MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: self.elderLatitude, longitude: self.elderLongitude))
             
             let elderloc1 = MapPin(title:"Elder", locationName: "Device Location", coordinate: coordinateElder)
-            let userloc1 = MapPin(title:"User", locationName: "Device Location", coordinate: coordinateUser)
+            let userloc1 = MapPin(title:"You", locationName: "Device Location", coordinate: coordinateUser)
             
             
 //            addressDictionary: [String(CNPostalAddressStreetKey): "Elder", String(CNPostalAddress): ""]
