@@ -37,9 +37,6 @@ struct Location: View {
             .background(Color("Color"))
             .cornerRadius(10)
         }
-        .onAppear(){
-            self.getElderLocation()
-        }
         .padding(.top, -50)
         .sheet(isPresented: $showDirections, content: {
             VStack{
@@ -61,10 +58,6 @@ struct Location: View {
         })
     }
     
-    func getElderLocation() {
-        
-        print("nothing")
-    }
 }
 
 struct MapView: UIViewRepresentable {
@@ -114,6 +107,8 @@ struct MapView: UIViewRepresentable {
            // Code you want to be delayed
             let coordinateUser = self.locationManager.location != nil ? self.locationManager.location!.coordinate : CLLocationCoordinate2D()
             print("Latitude of elderly: \(self.elderLatitude), Longitude of elderly : \(self.elderLongitude)")
+            
+            print("Latitude of user: \(coordinateUser.latitude), Longitude of user : \(coordinateUser.longitude)")
             let coordinateElder = CLLocationCoordinate2D(latitude: self.elderLatitude, longitude: self.elderLongitude)
             
             
@@ -157,7 +152,7 @@ struct MapView: UIViewRepresentable {
         
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
             let renderer = MKPolylineRenderer(overlay: overlay)
-            renderer.strokeColor = .blue
+            renderer.strokeColor = .systemBlue
             renderer.lineWidth = 5
             return renderer
         }

@@ -18,7 +18,7 @@ struct HRModal: View {
     @State var elements: [(String, Double)] = []
     @State var data: [ABHRvals] = []
     @State var selected = -1
-    var colors  = [Color("Color1"),Color("Color")]
+    var colors  = [Color("Color2"),Color("Color")]
     var body: some View {
         
         
