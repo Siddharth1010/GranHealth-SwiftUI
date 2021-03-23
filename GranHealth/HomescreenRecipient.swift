@@ -9,6 +9,7 @@ import MapKit
 import SwiftUI
 import Firebase
 import HealthKit
+import CoreLocation
 
 struct HomescreenRecipient: View {
     
@@ -119,8 +120,16 @@ struct HomescreenRecipient: View {
     
     func latestLocation(){
         
-        self.latitude = self.locationManager.location!.coordinate.latitude
-        self.longitude = self.locationManager.location!.coordinate.longitude
+        let coordinate2 = locationManager.location != nil ? locationManager.location!.coordinate : CLLocationCoordinate2D()
+        
+//        self.latitude = self.locationManager.location!.coordinate.latitude
+//        self.longitude = self.locationManager.location!.coordinate.longitude
+        
+        self.latitude = coordinate2.latitude
+        self.longitude = coordinate2.longitude
+        
+        print(self.latitude)
+        print(self.longitude)
         
         if let user = Auth.auth().currentUser?.email {
             
@@ -131,9 +140,28 @@ struct HomescreenRecipient: View {
                 "longitude": Double(self.longitude)
             ]) { err in
                 if let err = err{
-                    print("Issue saving StepCount data to Firestore: \(err)")
+                    print("Issue saving Location data to Firestore: \(err)")
                 } else {
                     print("Successfully saved Location data to Firestore")
+                }
+                
+            }
+        }
+        
+    }
+    
+    func latestLocationBackground(coordinate: CLLocationCoordinate2D){
+        
+        if let user = Auth.auth().currentUser?.email {
+            
+            self.db.collection(user).document("LocationCoordinates").setData([
+                "latitude": Double(coordinate.latitude),
+                "longitude": Double(coordinate.longitude)
+            ]) { err in
+                if let err = err{
+                    print("Issue saving background Location data to Firestore: \(err)")
+                } else {
+                    print("Successfully saved background Location data to Firestore")
                 }
                 
             }
@@ -359,7 +387,8 @@ class LocationManager: NSObject, ObservableObject {
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.distanceFilter = kCLDistanceFilterNone
-        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.requestAlwaysAuthorization()
+        self.locationManager.allowsBackgroundLocationUpdates = true
         self.locationManager.startUpdatingLocation()
     }
 }
@@ -373,6 +402,7 @@ extension LocationManager : CLLocationManagerDelegate {
         }
         
         self.location = location
+        
     }
 }
 

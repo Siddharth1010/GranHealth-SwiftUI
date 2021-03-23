@@ -33,6 +33,8 @@ struct Home : View {
 //    @State var flag: Int = 0
     @State var email: String = ""
     
+    @State var globalEmail = UserDefaults.standard.value(forKey: "globalEmail") as? String ?? ""
+    
     var body: some View{
         
         NavigationView{
@@ -78,6 +80,14 @@ struct Home : View {
                 
                 self.flag = UserDefaults.standard.value(forKey: "flag") as? Int ?? 0
                 }
+                
+                NotificationCenter.default.addObserver(forName: NSNotification.Name("globalEmail"), object: nil, queue: .main) { (_) in
+                
+                self.globalEmail = UserDefaults.standard.value(forKey: "globalEmail") as? String ?? ""
+                }
+                
+                
+                
             }
         }
     }
@@ -352,6 +362,8 @@ struct Login : View {
                 NotificationCenter.default.post(name: NSNotification.Name("flag"), object: nil)
                 UserDefaults.standard.set(true, forKey: "status")
                 NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
+                UserDefaults.standard.set(self.email, forKey: "globalEmail")
+                NotificationCenter.default.post(name: NSNotification.Name("globalEmail"), object: nil)
                 
             }
         }
@@ -382,6 +394,8 @@ struct Login : View {
                 NotificationCenter.default.post(name: NSNotification.Name("flag"), object: nil)
                 UserDefaults.standard.set(true, forKey: "status")
                 NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
+                UserDefaults.standard.set(self.email, forKey: "globalEmail")
+                NotificationCenter.default.post(name: NSNotification.Name("globalEmail"), object: nil)
                 
             }
         }
