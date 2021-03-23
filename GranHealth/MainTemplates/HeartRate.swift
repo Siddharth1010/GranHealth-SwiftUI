@@ -141,6 +141,42 @@ struct HeartRate: View {
         }
     }
     
+    func backgroundHRValues() -> [Double: Date] {
+        
+        var returnval: [Double: Date] = [:]
+        
+        if let user = Auth.auth().currentUser?.email {
+
+            self.db.collection(user).addSnapshotListener { (querySnapshot, error) in
+                if let e = error {
+                    print("Heart Rate values could not be retreived from firestore: \(e)")
+                } else {
+                    if let snapshotDocs = querySnapshot?.documents {
+                        for doc in snapshotDocs {
+                            if doc.documentID == "HeartRate"{
+                                print(doc.data()["HeartRateValues"]! as! [Double])
+                                let timestamp: [Timestamp] = doc.data()["HeartRateDates"]! as! [Timestamp]
+                                var dates: [Date] = []
+                                var hrvalues: [Double] = []
+                                for time in timestamp{
+                                    dates.append(time.dateValue())
+                                }
+                                
+                                hrvalues = doc.data()["HeartRateValues"]! as! [Double]
+                                returnval[hrvalues[hrvalues.count-1]] = dates[dates.count-1]
+                                print("Dict data in function: \(returnval)")
+                                
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return returnval
+    
+    }
+    
 
 }
 

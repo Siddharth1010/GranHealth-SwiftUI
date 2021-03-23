@@ -61,64 +61,79 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let req = UNNotificationRequest(identifier: "MSG", content: content, trigger: trigger)
                 UNUserNotificationCenter.current().add(req, withCompletionHandler: nil)
             
-            } 
+            }
+        }
+        
+        if (UserDefaults.standard.value(forKey: "flag") as? Int == 1){
             
-        
-        
-        }   
+            UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .sound, .alert]) { (_, _) in
+                
+            }
+            
+
+            let db = Firestore.firestore()
+            var recentHRVal: Double = 0.0
+            var recentHRDate: Date = Date()
+            
+            // LATEST HEART RATE
+            if let user = Auth.auth().currentUser?.email {
+
+                db.collection(user).addSnapshotListener { (querySnapshot, error) in
+                    if let e = error {
+                        print("Heart Rate values could not be retreived from firestore: \(e)")
+                    } else {
+                        if let snapshotDocs = querySnapshot?.documents {
+                            for doc in snapshotDocs {
+                                if doc.documentID == "HeartRate"{
+                                    print(doc.data()["HeartRateValues"]! as! [Double])
+                                    let timestamp: [Timestamp] = doc.data()["HeartRateDates"]! as! [Timestamp]
+                                    var dates: [Date] = []
+                                    var hrvalues: [Double] = []
+                                    for time in timestamp{
+                                        dates.append(time.dateValue())
+                                    }
+                                    
+                                    hrvalues = doc.data()["HeartRateValues"]! as! [Double]
+                                    recentHRVal = hrvalues[hrvalues.count-1]
+                                    recentHRDate = dates[dates.count-1]
+                                    
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            
+            print("Dictionary marks")
+                            print(recentHRVal)
+                            print(recentHRDate)
+
+                
+                if recentHRVal > 90.0 {
+                    
+                    let content = UNMutableNotificationContent()
+                    content.title = "GranHealth"
+                    content.body = "ALERT! Abnormal Heart Rate (\(recentHRVal)) BPM has been detected on \(recentHRDate)"
+                    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                    let req = UNNotificationRequest(identifier: "MSG", content: content, trigger: trigger)
+                    UNUserNotificationCenter.current().add(req, withCompletionHandler: nil)
+                }
+                else{
+                    print("Heart Rate Normal")
+                }
+            }
+                
+                
+            
+            
+            
+            
+        }
         
     }
     
-    
-    
-//    func registerBackgroundTasks(){
-//        let backgroundAppRefreshTaskScheduleIdentifier = "com.granhealth.fooBackgroundAppRefreshIdentifier"
-//        let backgroundProcessingTaskScheduleIdentifier = "com.granhealth.fooBackgroundProcessingIdentifier"
-//
-//        BGTaskScheduler.shared.register(
-//                    forTaskWithIdentifier: backgroundAppRefreshTaskScheduleIdentifier, using: nil) { (task) in
-//                        print("Background refresh task scheduler is being executed now")
-//                        print("Background time remaining: \(UIApplication.shared.backgroundTimeRemaining)s")
-//
-//                        task.expirationHandler = {
-//                            task.setTaskCompleted(success: false)
-//                        }
-//
-//                        if (UserDefaults.standard.value(forKey: "flag") as? Int == 2){
-//
-//                            let elder = HomescreenRecipient(email: "siddharthmani2000@gmail.com")
-//                            elder.authorizeHealthKit()
-//                            print("Done in background")
-//
-//                        }
-//
-//                        task.setTaskCompleted(success: true)
-//
-//
-//
-//
-//                }
-//    }
-    
-//    func applicationDidEnterBackground(_ application: UIApplication) {
-//        submitBackgroundTasks()
-//    }
-//
-//    func submitBackgroundTasks(){
-//
-//        let backgroundAppRefreshTaskScheduleIdentifier = "com.granhealth.fooBackgroundAppRefreshIdentifier"
-//        let timeDelay = 10.0
-//
-//        do{
-//            let backgroundAppRefreshTaskRequest = BGAppRefreshTaskRequest(identifier: backgroundAppRefreshTaskScheduleIdentifier)
-//
-//            backgroundAppRefreshTaskRequest.earliestBeginDate = Date(timeIntervalSinceNow: timeDelay)
-//            try BGTaskScheduler.shared.submit(backgroundAppRefreshTaskRequest)
-//            print("Submitted task request")
-//        } catch{
-//            print("Failed to submit BGTask")
-//        }
-//    }
 
     // MARK: UISceneSession Lifecycle
 
