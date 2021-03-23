@@ -12,21 +12,46 @@ import Firebase
 struct ProfileView : View {
     
     @Binding var show : Bool
+    @State var stepGoalLocal: String
+    @State var color = Color.black.opacity(0.7)
+    
+    
+
     
     var body: some View {
+                
+         ZStack{
         
-        ZStack{
-        
-        ZStack(alignment: .topLeading) {
+            ZStack(alignment: .topLeading) {
             
             GeometryReader{_ in
                 
                 VStack{
                     
-                    Text("Welcome to the profile page")
+                    Text("Profile")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(Color.black.opacity(0.7))
+                    
+                                
+                    
+                    
+                    Text("Elder's Step Goal")
+                    TextField("Number of steps", text: self.$stepGoalLocal, onCommit: {
+                        
+                        print("New step goal value: \(self.stepGoalLocal)")
+                        UserDefaults.standard.set(self.stepGoalLocal, forKey: "stepGoal")
+                        NotificationCenter.default.post(name: NSNotification.Name("stepGoal"), object: nil)
+                        print(UserDefaults.standard.value(forKey: "stepGoal") as! String)
+                        
+                        
+                    })
+                    .keyboardType(.numberPad)
+                    .autocapitalization(.none)
+                    .padding()
+                        .background(RoundedRectangle(cornerRadius: 4).stroke(self.stepGoalLocal != "" ? Color("Color") : self.color, lineWidth: 2))
+                    .padding(.top, 25)
+                    
                     
                     Button(action: {
                         
@@ -65,8 +90,11 @@ struct ProfileView : View {
             .navigationBarHidden(true)
             .navigationBarBackButtonHidden(true)
             .navigationBarTitle("")
+            
+            
                 
     }
+
 }
 }
 

@@ -34,6 +34,7 @@ struct Home : View {
     @State var email: String = ""
     
     @State var globalEmail = UserDefaults.standard.value(forKey: "globalEmail") as? String ?? ""
+    @State var stepGoal: String = UserDefaults.standard.value(forKey: "stepGoal") as? String ?? "50"
     
     var body: some View{
         
@@ -86,6 +87,15 @@ struct Home : View {
                 self.globalEmail = UserDefaults.standard.value(forKey: "globalEmail") as? String ?? ""
                 }
                 
+                NotificationCenter.default.addObserver(forName: NSNotification.Name("stepGoal"), object: nil, queue: .main) { (_) in
+
+                    self.stepGoal = UserDefaults.standard.value(forKey: "stepGoal") as? String ?? "50"
+                    
+                }
+                
+                if UserDefaults.standard.value(forKey: "stepGoal") as? String == nil {
+                    UserDefaults.standard.set("50", forKey: "stepGoal")
+                }
                 
                 
             }
@@ -108,7 +118,7 @@ struct HomescreenUser : View {
                 
                 ZStack{
                     
-                    NavigationLink(destination: ProfileView(show: self.$show), isActive: self.$show){
+                    NavigationLink(destination: ProfileView(show: self.$show,stepGoalLocal: UserDefaults.standard.value(forKey: "stepGoal") as? String ?? "50" ), isActive: self.$show){
                         
                         Text("")
                     }

@@ -104,6 +104,58 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
             
+            var todaysDate: String = ""
+            var values: [Double] = []
+            var dates: [Date] = []
+            var elements2: [(String, Double)] = []
+            var datesString: [String] = []
+            // STEP COUNT
+            if let user = Auth.auth().currentUser?.email {
+
+                        db.collection(user).addSnapshotListener { (querySnapshot, error) in
+                            if let e = error {
+                                print("Step values could not be retreived from firestore: \(e)")
+                            } else {
+                                
+                                if let snapshotDocs = querySnapshot?.documents {
+                                    for doc in snapshotDocs {
+                                        if doc.documentID == "StepCount"{
+                                            print(doc.data()["StepCountValues"]! as! [Double])
+                                            let timestamp: [Timestamp] = doc.data()["StepCountDates"]! as! [Timestamp]
+                                            var tempdates: [Date] = []
+                                            for time in timestamp{
+                                                tempdates.append(time.dateValue())
+                                            }
+                                            print(tempdates)
+                                            let tempvalues: [Double] = doc.data()["StepCountValues"]! as! [Double]
+                                            let dateFormator = DateFormatter()
+                                            dateFormator.dateFormat = "dd/MM/yyyy hh:mm s"
+            //                                let StartDate = dateFormator.string(from: data.startDate)
+                                            
+                                            for i in 0 ..< tempvalues.count
+                                            {
+                                        
+                                                    values.append(tempvalues[i])
+                                                    dates.append(tempdates[i])
+            //                                        let tempcurval: Double = Double(String(format: "%.2f", tempvalues[i]))!
+                                                    elements2.append((dateFormator.string(from: tempdates[i]), tempvalues[i]))
+                                                    datesString.append(dateFormator.string(from: tempdates[i]))
+                                                
+                                            }
+                                            
+                                            todaysDate = dateFormator.string(from: Date())
+//                                            self.StepValues = values
+//                                            self.StepDates = dates
+//                                            self.elements = elements2
+//                                            self.StepDatesString = datesString
+//                                            self.todaysDate = dateFormator.string(from: Date())
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             
             print("Dictionary marks")
@@ -123,6 +175,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 else{
                     print("Heart Rate Normal")
                 }
+                
+                let stepGoal = UserDefaults.standard.value(forKey: "stepGoal") as? String
+                let stepgoalval = Int(stepGoal!)!
+                print("Step Goal Value background: \(stepgoalval)")
+                
+                if datesString[datesString.count-1].components(separatedBy: " ")[0] == todaysDate.components(separatedBy: " ")[0] {
+                    
+                    let elderStepCount = Int(values[values.count-1])
+//                    Text(String(format: "%.0f", self.StepValues[self.StepValues.count-1]) + " steps")
+                    
+                    if elderStepCount >= stepgoalval {
+                        
+                        let content = UNMutableNotificationContent()
+                        content.title = "GranHealth"
+                        content.body = "Elder has completed today's step goal (\(elderStepCount) steps)"
+                        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                        let req = UNNotificationRequest(identifier: "MSG", content: content, trigger: trigger)
+                        UNUserNotificationCenter.current().add(req, withCompletionHandler: nil)
+                        
+                    }
+                }
+                
             }
                 
                 
