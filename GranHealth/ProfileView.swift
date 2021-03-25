@@ -69,6 +69,7 @@ struct ProfileView : View {
                                         })
                                             .frame(width: 45, height: 5)
                                         .keyboardType(.numberPad)
+                                            .foregroundColor(.white)
                                         .autocapitalization(.none)
                                         .padding()
                                             .background(RoundedRectangle(cornerRadius: 4).stroke(self.stepGoalLocal != "" ? Color.white : self.color, lineWidth: 2))
@@ -79,7 +80,7 @@ struct ProfileView : View {
                                         }
                                         .padding()
                                         .frame(width: UIScreen.main.bounds.width - 10)
-                                        .background(Color("Color"))
+                                        .background(Color.blue)
                                         .cornerRadius(10)
                                         .padding(.bottom, 15)
                     
@@ -110,7 +111,7 @@ struct ProfileView : View {
                     }
                     .padding()
                     .frame(width: UIScreen.main.bounds.width - 10)
-                    .background(Color("Color"))
+                    .background(Color.blue)
                     .cornerRadius(10)
                     .padding(.bottom, 25)
                     
@@ -141,7 +142,7 @@ struct ProfileView : View {
                     }
                     .padding()
                     .frame(width: UIScreen.main.bounds.width - 10)
-                    .background(Color("Color"))
+                    .background(Color.blue)
                     .cornerRadius(10)
                     .padding(.bottom, 40)
                     
@@ -173,7 +174,7 @@ struct ProfileView : View {
                     }
                     .padding()
                     .frame(width: UIScreen.main.bounds.width - 10)
-                    .background(Color("Color"))
+                    .background(Color.blue)
                     .cornerRadius(10)
                     .padding(.bottom, 55)
                     
@@ -194,7 +195,7 @@ struct ProfileView : View {
                             .padding(.vertical)
                             .frame(width: UIScreen.main.bounds.width - 10)
                     }
-                    .background(Color.red)
+                    .background(Color("Color"))
                     .cornerRadius(10)
                     .padding(.top, 25)
                 }
