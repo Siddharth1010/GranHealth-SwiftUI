@@ -44,6 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let elder = HomescreenRecipient(email: email!)
         elder.latestHeartRate()
         elder.latestSteps()
+//        elder.getHeight()
         let locationManager = LocationManager()
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             let coordinate = locationManager.location != nil ? locationManager.location!.coordinate : CLLocationCoordinate2D()
@@ -156,7 +157,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         }
                     }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             
             print("Dictionary marks")
                             print(recentHRVal)
@@ -191,7 +192,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         content.title = "GranHealth"
                         content.body = "Elder has completed today's step goal (\(elderStepCount) steps)"
                         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                        let req = UNNotificationRequest(identifier: "MSG", content: content, trigger: trigger)
+                        let req = UNNotificationRequest(identifier: "MSG1", content: content, trigger: trigger)
                         UNUserNotificationCenter.current().add(req, withCompletionHandler: nil)
                         
                     }
@@ -205,6 +206,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             
         }
+        
+        completionHandler(.newData)
         
     }
     

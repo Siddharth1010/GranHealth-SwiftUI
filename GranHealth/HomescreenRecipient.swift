@@ -76,7 +76,7 @@ struct HomescreenRecipient: View {
                 
             }) {
                 
-                Text("Get data")
+                Text("Send data")
                     .foregroundColor(.white)
                     .padding(.vertical)
                     .frame(width: UIScreen.main.bounds.width - 50)
@@ -114,6 +114,24 @@ struct HomescreenRecipient: View {
         
         
         self.latestLocation()
+        
+        read = Set([HKObjectType.quantityType(forIdentifier: .height)!])
+        share = Set([HKObjectType.quantityType(forIdentifier: .height)!])
+        healthStore.requestAuthorization(toShare: share, read: read) { (chk,error) in
+            if(chk){
+                print("permission granted - Height")
+                self.getHeight()
+            }
+            }
+
+        read = Set([HKObjectType.quantityType(forIdentifier: .bodyMass)!])
+        share = Set([HKObjectType.quantityType(forIdentifier: .bodyMass)!])
+        healthStore.requestAuthorization(toShare: share, read: read) { (chk,error) in
+            if(chk){
+                print("permission granted - Weight")
+                self.getWeight()
+            }
+            }
             
         
     }
@@ -150,6 +168,8 @@ struct HomescreenRecipient: View {
         
     }
     
+    
+    
     func latestLocationBackground(coordinate: CLLocationCoordinate2D){
         
         if let user = Auth.auth().currentUser?.email {
@@ -167,6 +187,150 @@ struct HomescreenRecipient: View {
             }
         }
         
+    }
+    
+    func getWeight() {
+
+        guard let sampleType = HKObjectType.quantityType(forIdentifier: .bodyMass) else {
+            return
+        }
+
+        let startDate = Calendar.current.date(byAdding: .year, value: -2, to: Date())
+
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: Date(), options: .strictEndDate)
+
+        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
+
+        var wval: Double = 0.0
+
+        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: [sortDescriptor]) { (sample, result, error) in
+
+        guard error == nil else{
+
+            return
+        }
+
+           var weightvals: [Double] = []
+            let data = result!
+            let unit = HKUnit(from: "lb")
+            let dateFormator = DateFormatter()
+            dateFormator.dateFormat = "dd/MM/yyyy"
+
+            print(data)
+
+            if data.isEmpty{
+                wval = 0.0
+                print("Empty")
+            }
+            else{
+                for index in data{
+
+                let dataval = index as! HKQuantitySample
+                let hr2 = dataval.quantity.doubleValue(for: unit)
+                weightvals.append(hr2)
+                    print("Else block")
+                }
+
+                print("The weight values are: \(weightvals)")
+                wval = weightvals[weightvals.count-1]
+                let wvalString: String = String(format: "%.1f", wval)
+                print(Double(wvalString)!)
+                wval = Double(wvalString)!
+
+            }
+
+            if let user = Auth.auth().currentUser?.email {
+
+
+                self.db.collection(user).document("Weight").setData([
+                    "Weight": wval
+                ]) { err in
+                    if let err = err{
+                        print("Issue saving Weight data to Firestore: \(err)")
+                    } else {
+                        print("Successfully saved Weight data to Firestore")
+                    }
+
+                }
+            }
+
+
+        }
+        healthStore.execute(query)
+    }
+
+    func getHeight(){
+
+        guard let sampleType = HKObjectType.quantityType(forIdentifier: .height) else {
+            return
+        }
+
+        let startDate = Calendar.current.date(byAdding: .year, value: -2, to: Date())
+
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: Date(), options: .strictEndDate)
+
+        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
+
+        var hval: Double = 0.0
+
+        let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: [sortDescriptor]) { (sample, result, error) in
+
+            guard error == nil else{
+
+                return
+            }
+
+            var heightvals: [Double] = []
+            let data = result!
+            let unit = HKUnit(from: "ft")
+            let dateFormator = DateFormatter()
+            dateFormator.dateFormat = "dd/MM/yyyy"
+
+            print(data)
+            if data.isEmpty{
+                hval = 0.0
+            }
+
+            else{
+            for index in data{
+
+                let dataval = index as! HKQuantitySample
+                let hr2 = dataval.quantity.doubleValue(for: unit)
+                heightvals.append(hr2)
+
+
+
+            }
+                print("The height values are: \(heightvals)")
+                hval = heightvals[heightvals.count-1]
+                let hvalString: String = String(format: "%.3f", hval)
+                print(Double(hvalString)!)
+                hval = Double(hvalString)!
+            }
+
+            if let user = Auth.auth().currentUser?.email {
+
+
+                self.db.collection(user).document("Height").setData([
+                    "Height": hval
+                ]) { err in
+                    if let err = err{
+                        print("Issue saving Height data to Firestore: \(err)")
+                    } else {
+                        print("Successfully saved Height data to Firestore")
+                    }
+
+                }
+            }
+
+
+
+
+        }
+        healthStore.execute(query)
+
+
+
     }
     
     func latestSteps(){
