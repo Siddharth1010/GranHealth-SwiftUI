@@ -1,10 +1,4 @@
-//
-//  HomescreenRecipient.swift
-//  GranHealth
-//
-//  Created by MANI NAIR on 19/02/21.
-//  Copyright © 2021 com.siddharthnair. All rights reserved.
-//
+
 import MapKit
 import SwiftUI
 import Firebase
@@ -43,11 +37,11 @@ struct HomescreenRecipient: View {
             
             
             
-            Text("\(coordinate.latitude), \(coordinate.longitude)")
-            .font(.title)
-            .fontWeight(.bold)
-            .foregroundColor(Color.black.opacity(0.7))
-            .padding(.top,5)
+//            Text("\(coordinate.latitude), \(coordinate.longitude)")
+//            .font(.title)
+//            .fontWeight(.bold)
+//            .foregroundColor(Color.black.opacity(0.7))
+//            .padding(.top,5)
             
             Button(action: {
                 

@@ -1,10 +1,3 @@
-//
-//  AppDelegate.swift
-//  GranHealth
-//
-//  Created by MANI NAIR on 17/02/21.
-//  Copyright © 2021 com.siddharthnair. All rights reserved.
-//
 
 import UIKit
 import Firebase
@@ -157,7 +150,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         }
                     }
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
             
             print("Dictionary marks")
                             print(recentHRVal)
