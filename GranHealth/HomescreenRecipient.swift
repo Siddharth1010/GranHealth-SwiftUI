@@ -19,7 +19,7 @@ struct HomescreenRecipient: View {
     var body: some View {
         
         let coordinate = locationManager.location != nil ? locationManager.location!.coordinate : CLLocationCoordinate2D()
-        
+        print("Access Location")
 //        let newlat = CLLocationDegrees(self.latitude)
         
         return VStack{
