@@ -84,7 +84,6 @@ struct HRModal: View {
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
-//                    .padding()
                     .padding(.leading, 20)
                     .padding(.bottom, 8)
             }
