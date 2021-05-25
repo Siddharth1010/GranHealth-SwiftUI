@@ -26,7 +26,7 @@ struct ProfileView : View {
                     Text("PROFILE")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                    .foregroundColor(Color.black.opacity(1))
+                    .foregroundColor(Color.primary)
                     .padding(.leading,10)
                     
                     Divider()
@@ -40,7 +40,7 @@ struct ProfileView : View {
                                         Text("ELDER")
                                         .font(.title)
                                         .fontWeight(.bold)
-                                        .foregroundColor(Color.black.opacity(1))
+                                        .foregroundColor(Color.primary)
                                         .padding(.leading,10)
                                         .padding(.bottom, 5)
                     
@@ -143,7 +143,7 @@ struct ProfileView : View {
                     Text("USER")
                     .font(.title)
                     .fontWeight(.bold)
-                    .foregroundColor(Color.black.opacity(1))
+                    .foregroundColor(Color.primary)
                     .padding(.leading,10)
                     .padding(.bottom, 20)
                     

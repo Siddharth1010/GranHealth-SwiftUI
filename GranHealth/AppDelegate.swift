@@ -162,6 +162,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let content = UNMutableNotificationContent()
                     content.title = "GranHealth"
                     content.body = "ALERT! Abnormal Heart Rate (\(recentHRVal)) BPM has been detected on \(recentHRDate)"
+//                    content.body = "ALERT! Impact (Fall) detected. Contact Elder immediately."
                     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
                     let req = UNNotificationRequest(identifier: "MSG", content: content, trigger: trigger)
                     UNUserNotificationCenter.current().add(req, withCompletionHandler: nil)

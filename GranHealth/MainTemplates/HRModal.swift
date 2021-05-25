@@ -1,10 +1,4 @@
-//
-//  HRModal.swift
-//  GranHealth
-//
-//  Created by MANI NAIR on 21/02/21.
-//  Copyright © 2021 com.siddharthnair. All rights reserved.
-//
+
 
 import SwiftUI
 import Firebase
@@ -25,12 +19,16 @@ struct HRModal: View {
         
         VStack(alignment: .leading, spacing: 15){
 
-            Text("Abnormal Heart Rates")
+            Text("Abnormal Heart Rate")
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
-//                .padding()
-            .padding(.leading, 20)
+            .padding(.leading, 28)
+            
+            Text("Recently recorded abnormal heart rates")
+                .font(.subheadline)
+                            .foregroundColor(.primary)
+                        .padding(.leading, 28)
                 
             
             HStack(spacing: 15){
@@ -48,7 +46,7 @@ struct HRModal: View {
                             }
                             else{
                                 Text(String(format: "%.0f", abhrdata.hrval))
-                                .foregroundColor(.black)
+                                .foregroundColor(.primary)
                                 .padding(.bottom, 5)
                                 .font(.callout)
                             }
@@ -75,8 +73,8 @@ struct HRModal: View {
             
             }
             .padding()
-            .background(Color.black.opacity(0.05))
-            .shadow(color: Color.black.opacity(0.15), radius: 10, x: 10, y: 10)
+            .background(Color.primary.opacity(0.05))
+            .shadow(color: Color.primary.opacity(0.15), radius: 10, x: 10, y: 10)
             .frame(height: 300)
             .cornerRadius(10)
             .padding()
@@ -85,7 +83,7 @@ struct HRModal: View {
                 Text("Statistics")
                     .font(.title)
                     .fontWeight(.bold)
-                    .foregroundColor(.black)
+                    .foregroundColor(.primary)
 //                    .padding()
                     .padding(.leading, 20)
                     .padding(.bottom, 8)

@@ -1,10 +1,3 @@
-//
-//  Steps.swift
-//  GranHealth
-//
-//  Created by MANI NAIR on 19/02/21.
-//  Copyright © 2021 com.siddharthnair. All rights reserved.
-//
 
 import SwiftUI
 import Firebase
@@ -31,8 +24,12 @@ struct Steps: View {
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundColor(.primary)
-//                .padding()
-            .padding(.leading, 20)
+            .padding(.leading, 28)
+            
+            Text("The number of steps recorded per day")
+                .font(.subheadline)
+                .foregroundColor(.primary)
+            .padding(.leading, 28)
             
                 
             
@@ -51,7 +48,7 @@ struct Steps: View {
                             }
                             else{
                                 Text(String(format: "%.0f", stepdata.stepcountval))
-                                .foregroundColor(.black)
+                                .foregroundColor(.primary)
                                 .padding(.bottom, 5)
                                 .font(.callout)
                             }
@@ -78,8 +75,8 @@ struct Steps: View {
             
             }
             .padding()
-            .background(Color.black.opacity(0.05))
-            .shadow(color: Color.black.opacity(0.15), radius: 10, x: 10, y: 10)
+            .background(Color.primary.opacity(0.08))
+            .shadow(color: Color.primary.opacity(0.15), radius: 10, x: 10, y: 10)
             .frame(height: 300)
             .cornerRadius(10)
             .padding()
@@ -88,8 +85,7 @@ struct Steps: View {
                 Text("Statistics")
                     .font(.title)
                     .fontWeight(.bold)
-                    .foregroundColor(.black)
-//                    .padding()
+                    .foregroundColor(.primary)
                     .padding(.leading, 20)
 //                    .padding(.bottom, 8)
             }
