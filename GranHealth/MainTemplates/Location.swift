@@ -165,7 +165,3 @@ init(title: String, locationName: String, coordinate: CLLocationCoordinate2D) {
       self.coordinate = coordinate
    }
 }
-
-
-
-
