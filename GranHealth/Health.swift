@@ -1,6 +1,7 @@
 
 import SwiftUI
 
+// Structure for the carousel options and their information
 struct Health: Hashable, Codable, Identifiable {
     
     var id:Int
@@ -9,9 +10,5 @@ struct Health: Hashable, Codable, Identifiable {
     var category:String
     var description:String
     
-//    enum Category: String, CodingKey {
-//        case mobility = "Mobility"
-//        case location = "Location"
-//        case heart = "Heart"
-//    }
+
 }
