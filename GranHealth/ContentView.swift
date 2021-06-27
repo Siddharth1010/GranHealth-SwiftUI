@@ -218,6 +218,7 @@ struct Login : View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 200, height: 200)
+                .padding(.top, 25)
             
             Text("Log in to your account")
                 .font(.title)
@@ -312,6 +313,8 @@ struct Login : View {
             
         }  // Main Vertical Stack ends
             .padding(.horizontal, 25)
+//        .padding(.vertical, 40)
+            
             
             
             

@@ -54,8 +54,3 @@ struct HealthRow: View {
     }
 }
 
-//struct HealthRow_Previews: PreviewProvider {
-//    static var previews: some View {
-//        HealthRow(categoryName: "HEART AND MOTION", healthCats: healthData)
-//    }
-//}

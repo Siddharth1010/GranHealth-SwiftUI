@@ -2,6 +2,7 @@
 import SwiftUI
 import Firebase
 
+// View to reveal errors in Logging-in / Registering  or status updates
 struct ErrorView : View {
     
     @State var color = Color.black.opacity(0.7)
@@ -16,6 +17,7 @@ struct ErrorView : View {
                 
                 HStack{
                     
+                    // Check if it is an error or status/mesage update and display accordingly
                     if self.error != "Register Confirmed"{
                     
                     Text(self.error == "Password Reset" ? "Message" : "Error")
@@ -38,12 +40,14 @@ struct ErrorView : View {
                 
                 if self.error != "Register Confirmed"{
                 
+                    // Send link for password reset along with prompt
                 Text(self.error == "Password Reset" ? "Password reset link has been sent successfully" : self.error)
                     .foregroundColor(self.color)
                     .padding(.top)
                     .padding(.horizontal, 25)
                     
                 }
+                // Provide status update in View - Successfully Registered
                 else{
                     Text("Registered Successfully. Please log in as a user")
                     .foregroundColor(self.color)
@@ -52,6 +56,7 @@ struct ErrorView : View {
                     
                 }
                 
+                // Button to close the view once user reads message
                 Button(action: {
                     
                     self.alert.toggle()
@@ -77,8 +82,3 @@ struct ErrorView : View {
     }
 }
 
-//struct ErrorView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ErrorView()
-//    }
-//}
