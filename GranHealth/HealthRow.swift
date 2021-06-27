@@ -15,36 +15,36 @@ struct HealthRow: View {
             
             Text(self.categoryName)
                 .font(.title)
-        
-            ScrollView(.horizontal,showsIndicators: false) {
             
-            HStack(alignment: .top) {
+            ScrollView(.horizontal,showsIndicators: false) {
                 
-                
-            ForEach (healthCats, id: \.self) { health in
-                
-                NavigationLink(destination: HealthDetail(health: health, show: self.$show, isActive: self.$isActive)){
+                HStack(alignment: .top) {
                     
-                HealthItem(health: health, show: self.$show)
-                .frame(width: 300)
-                .padding(.trailing, 30)
                     
-        
+                    ForEach (healthCats, id: \.self) { health in
+                        
+                        NavigationLink(destination: HealthDetail(health: health, show: self.$show, isActive: self.$isActive)){
+                            
+                            HealthItem(health: health, show: self.$show)
+                                .frame(width: 300)
+                                .padding(.trailing, 30)
+                            
+                            
+                            
+                        }
+                        .simultaneousGesture(TapGesture().onEnded{
+                            //                    self.isActive = true
+                            //                    self.isActive.toggle()
+                            print(self.isActive)
+                            
+                        })
+                        
+                        
+                    }
                     
                 }
-                .simultaneousGesture(TapGesture().onEnded{
-//                    self.isActive = true
-//                    self.isActive.toggle()
-                    print(self.isActive)
-                    
-                })
-                
-                    
-            }
                 
             }
-            
-        }
             
         }
         
