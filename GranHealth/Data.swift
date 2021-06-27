@@ -1,9 +1,10 @@
 
 import Foundation
 
-
+// Load contents of JSON file (Carousel)
 let healthData:[Health] = load("health.json")
 
+// Function to load JSON file contents and handle errors
 func load<T: Decodable>(_ filename:String, as type:T.Type = T.self) -> T {
     
     let data:Data
