@@ -201,6 +201,7 @@ struct HomescreenRecipient: View {
                 return
             }
             // Extract values from the sample through HKUnit lb
+            // List to store values
             var weightvals: [Double] = []
             let data = result!
             let unit = HKUnit(from: "lb")
@@ -260,7 +261,7 @@ struct HomescreenRecipient: View {
         guard let sampleType = HKObjectType.quantityType(forIdentifier: .height) else {
             return
         }
-        
+        // Get height values. Enter start date and declare sort descriptor
         let startDate = Calendar.current.date(byAdding: .year, value: -2, to: Date())
         
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: Date(), options: .strictEndDate)
@@ -269,6 +270,7 @@ struct HomescreenRecipient: View {
         
         var hval: Double = 0.0
         
+        //  Query to extract the stored samples from HealthKit
         let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: [sortDescriptor]) { (sample, result, error) in
             
             guard error == nil else{
@@ -276,17 +278,21 @@ struct HomescreenRecipient: View {
                 return
             }
             
+            // Extract values from the sample through HKUnit ft
+            // List to store values
             var heightvals: [Double] = []
             let data = result!
             let unit = HKUnit(from: "ft")
             let dateFormator = DateFormatter()
             dateFormator.dateFormat = "dd/MM/yyyy"
             
+            // If there is no weight data store  0.0 into Firestore
+            // Check while dispalying to user
             print(data)
             if data.isEmpty{
                 hval = 0.0
             }
-            
+            // If data is available append the values into a list
             else{
                 for index in data{
                     
@@ -299,14 +305,15 @@ struct HomescreenRecipient: View {
                 }
                 print("The height values are: \(heightvals)")
                 hval = heightvals[heightvals.count-1]
+                // Format the height values to 3 decimal places and store most recent record in the variable
                 let hvalString: String = String(format: "%.3f", hval)
                 print(Double(hvalString)!)
                 hval = Double(hvalString)!
             }
-            
+            // Store the height values in firestore
             if let user = Auth.auth().currentUser?.email {
                 
-                
+                // Search for document Height and store the value
                 self.db.collection(user).document("Height").setData([
                     "Height": hval
                 ]) { err in
@@ -319,68 +326,70 @@ struct HomescreenRecipient: View {
                 }
             }
             
-            
-            
-            
         }
+        // Execute the query
         healthStore.execute(query)
-        
-        
-        
+    
     }
     
+    // Function to get the latest step count data from HealthKit
     func latestSteps(){
         guard let sampleType = HKObjectType.quantityType(forIdentifier: .stepCount) else {
             return
         }
         
+        // Get step count values. Enter start date and declare sort descriptor
         let startDate = Calendar.current.date(byAdding: .month, value: -1, to: Date())
         
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: Date(), options: .strictEndDate)
         
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
         
+        //  Query to extract the stored samples from HealthKit
         let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: [sortDescriptor]) { (sample, result, error) in
             
             guard error == nil else{
                 return
             }
-            
-            //            let data = result
-            //            print(data)
-            
+
+            // Lists to store dates as well as the step count values
             var tempsteps: [Double] = []
             var tempdates: [Date] = []
             var tempdatesString: [String] = []
             let data = result!
+            // Extract data from HKUnit count
             let unit = HKUnit(from: "count")
             let dateFormator = DateFormatter()
             dateFormator.dateFormat = "dd/MM/yyyy"
             
             for index in data{
-                
+                // Get the step counts and append them to a list
                 let dataval = index as! HKQuantitySample
                 let hr2 = dataval.quantity.doubleValue(for: unit)
                 tempsteps.append(hr2)
+                // Get start date for the record and convert it into a suitable date format
                 let startdate = dataval.startDate
                 let calendarDate = Calendar.current.dateComponents([.day, .year, .month], from: startdate)
                 tempdatesString.append("\(calendarDate.day!)/\(calendarDate.month!)/\(calendarDate.year!)")
+                // Append the dates into a list
                 tempdates.append(startdate)
                 
             }
-            
+            // Reverse lists to get most recent dates and values first
             tempsteps.reverse()
             tempdates.reverse()
             tempdatesString.reverse()
             print(tempsteps)
             print(tempdates)
             print(tempdatesString)
-            
+            // Lists for steps data and dates
             var steps: [Double] = []
             var dates: [Date] = []
             
+            // Variable to sum up the recorded step counts for the current day
             var sum: Double = 0
             var date = Date()
+            // Loop through the values and accumulate the step counts recorded for each day
             for i in 0..<tempsteps.count {
                 if i != tempsteps.count-1 {
                     if tempdatesString[i] == tempdatesString[i+1] {
@@ -419,10 +428,10 @@ struct HomescreenRecipient: View {
             
             print(steps)
             print(dates)
-            
+            // Store step count data into Firestore
             if let user = Auth.auth().currentUser?.email {
                 
-                
+                // Store in Stepcount document
                 self.db.collection(user).document("StepCount").setData([
                     "StepCountValues": steps,
                     "StepCountDates": dates
@@ -436,75 +445,60 @@ struct HomescreenRecipient: View {
                 }
             }
             
-            
-            
-            
-            
         }
-        
+        // Execute the query
         healthStore.execute(query)
     }
     
     
-    
+    // Function to extract the latest recorded heart rate values
     func latestHeartRate(){
         
         guard let sampleType = HKObjectType.quantityType(forIdentifier: .heartRate) else{
             return
         }
+        // Get step count values. Enter start date and declare sort descriptor
         let startDate = Calendar.current.date(byAdding: .month, value: -1, to: Date())
         
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: Date(), options: .strictEndDate)
         
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
         
+        // Query to extract stored samples from Healthkit
         let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: [sortDescriptor]) { (sample, result, error) in
             guard error == nil else{
                 return
             }
-            
-            //            let data = result![0] as! HKQuantitySample
-            //            let unit = HKUnit(from: "count/min")
-            //            let latestHr = data.quantity.doubleValue(for: unit)
-            //            print("latest Heart rate: \(latestHr) BPM")
-            
+            // Lists to store the heart rate values and dates
             var heartRateValues: [Double] = []
             var heartRateDates: [Date] = []
             let data = result!
+            // Extract values through unit of count/min
             let unit = HKUnit(from: "count/min")
             let dateFormator = DateFormatter()
             dateFormator.dateFormat = "dd/MM/yyyy hh:mm s"
             
             for index in data{
                 
+                // Append heart rate values into the list
                 let dataval = index as! HKQuantitySample
                 let hr2 = dataval.quantity.doubleValue(for: unit)
                 heartRateValues.append(hr2)
-                //                let startdate = dateFormator.string(from: dataval.startDate)
                 let startdate = dataval.startDate
+                // Append date values into the list
                 heartRateDates.append(startdate)
                 
             }
+            // Reverse the lists to have the most recent records first
             heartRateValues.reverse()
             heartRateDates.reverse()
             print(heartRateValues)
             print(heartRateDates)
             
+            // Store the heart rate values into Firestore
             if let user = Auth.auth().currentUser?.email {
-                
-                
-                //                self.db.collection(user).addDocument(data: [
-                //                    "HeartRateValues": heartRateValues,
-                //                    "HeartRateDates": heartRateDates
-                //                ]) { (error) in
-                //
-                //                    if let e = error {
-                //
-                //                        print("Issue saving HeartRate data to Firestore: \(e)")
-                //                    } else {
-                //                        print("Successfully saved HeartRate data to Firestore")
-                //                    }
-                //                }
+ 
+                // Store in HeartRate document
                 self.db.collection(user).document("HeartRate").setData([
                     "HeartRateValues": heartRateValues,
                     "HeartRateDates": heartRateDates
@@ -519,7 +513,7 @@ struct HomescreenRecipient: View {
             }
             
         }
-        
+        // Execute the query
         healthStore.execute(query)
         return
     }
