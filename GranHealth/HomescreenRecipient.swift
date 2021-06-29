@@ -5,10 +5,11 @@ import Firebase
 import HealthKit
 import CoreLocation
 
+// View which appears on the elder's iPhone
 struct HomescreenRecipient: View {
-    
+    // Observe location manager for changes in the location
     @ObservedObject var locationManager = LocationManager()
-
+    
     @State var email: String
     @State var latitude: CLLocationDegrees = 0
     @State var longitude: CLLocationDegrees = 0
@@ -18,9 +19,9 @@ struct HomescreenRecipient: View {
     
     var body: some View {
         
+        // Access the current location of the elderly individual
         let coordinate = locationManager.location != nil ? locationManager.location!.coordinate : CLLocationCoordinate2D()
         print("Access Location")
-//        let newlat = CLLocationDegrees(self.latitude)
         
         return VStack{
             
@@ -30,23 +31,17 @@ struct HomescreenRecipient: View {
                 .foregroundColor(Color.black.opacity(0.7))
             
             Text(self.email)
-            .font(.title)
-            .fontWeight(.bold)
-            .foregroundColor(Color.black.opacity(0.7))
-            .padding(.top,5)
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundColor(Color.black.opacity(0.7))
+                .padding(.top,5)
             
-            
-            
-//            Text("\(coordinate.latitude), \(coordinate.longitude)")
-//            .font(.title)
-//            .fontWeight(.bold)
-//            .foregroundColor(Color.black.opacity(0.7))
-//            .padding(.top,5)
-            
+            // Button for Elder to log out of the application
             Button(action: {
                 
                 try! Auth.auth().signOut()
                 withAnimation{
+                    // Set user defaults to false ro remember login status
                     UserDefaults.standard.set(false, forKey: "status")
                     NotificationCenter.default.post(name: NSNotification.Name("status"), object: nil)
                 }
@@ -62,11 +57,10 @@ struct HomescreenRecipient: View {
             .cornerRadius(10)
             .padding(.top, 25)
             
-            
+            // Button to manually send Health and Location information to caretakers iPhone
             Button(action: {
                 
                 self.authorizeHealthKit()
-    
                 
             }) {
                 
@@ -81,13 +75,13 @@ struct HomescreenRecipient: View {
             
             
         }
-//        .onAppear(){
-//
-//        }
     }
-
+    
+    // Function to authorize HealthKit initially
+    // and send health / location data to caretakers iPhone
     func authorizeHealthKit(){
         
+        // Request authorization to read and share elder's Heart Rate values
         var read = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!])
         var share = Set([HKObjectType.quantityType(forIdentifier: .heartRate)!])
         healthStore.requestAuthorization(toShare: share, read: read) { (chk,error) in
@@ -96,7 +90,8 @@ struct HomescreenRecipient: View {
                 self.latestHeartRate()
             }
         }
-            
+        
+        // Request authorization to read and share elder's Step Count values
         read = Set([HKObjectType.quantityType(forIdentifier: .stepCount)!])
         share = Set([HKObjectType.quantityType(forIdentifier: .stepCount)!])
         healthStore.requestAuthorization(toShare: share, read: read) { (chk,error) in
@@ -104,11 +99,12 @@ struct HomescreenRecipient: View {
                 print("permission granted - Step Count")
                 self.latestSteps()
             }
-            }
+        }
         
-        
+        // Call function to get the latest location of the elder
         self.latestLocation()
         
+        // Request authorization to read and share elder's Height values
         read = Set([HKObjectType.quantityType(forIdentifier: .height)!])
         share = Set([HKObjectType.quantityType(forIdentifier: .height)!])
         healthStore.requestAuthorization(toShare: share, read: read) { (chk,error) in
@@ -116,8 +112,9 @@ struct HomescreenRecipient: View {
                 print("permission granted - Height")
                 self.getHeight()
             }
-            }
-
+        }
+        
+        // Request authorization to read and share elder's Weight values
         read = Set([HKObjectType.quantityType(forIdentifier: .bodyMass)!])
         share = Set([HKObjectType.quantityType(forIdentifier: .bodyMass)!])
         healthStore.requestAuthorization(toShare: share, read: read) { (chk,error) in
@@ -125,17 +122,13 @@ struct HomescreenRecipient: View {
                 print("permission granted - Weight")
                 self.getWeight()
             }
-            }
-            
-        
+        }
     }
     
+    // Function to get the elder's latest location
     func latestLocation(){
-        
+        // Extract coordiantes from the location manager
         let coordinate2 = locationManager.location != nil ? locationManager.location!.coordinate : CLLocationCoordinate2D()
-        
-//        self.latitude = self.locationManager.location!.coordinate.latitude
-//        self.longitude = self.locationManager.location!.coordinate.longitude
         
         self.latitude = coordinate2.latitude
         self.longitude = coordinate2.longitude
@@ -143,10 +136,12 @@ struct HomescreenRecipient: View {
         print(self.latitude)
         print(self.longitude)
         
+        // Securely save Location Coordinates to Firestore
         if let user = Auth.auth().currentUser?.email {
             
             print(self.latitude)
             print(self.longitude)
+            // Storing into document LocationCoordinates
             self.db.collection(user).document("LocationCoordinates").setData([
                 "latitude": Double(self.latitude),
                 "longitude": Double(self.longitude)
@@ -163,11 +158,11 @@ struct HomescreenRecipient: View {
     }
     
     
-    
+    // Function to store latest location in the background through background fetch
     func latestLocationBackground(coordinate: CLLocationCoordinate2D){
         
         if let user = Auth.auth().currentUser?.email {
-            
+            // Storing into document LocationCoordinates
             self.db.collection(user).document("LocationCoordinates").setData([
                 "latitude": Double(coordinate.latitude),
                 "longitude": Double(coordinate.longitude)
@@ -183,59 +178,64 @@ struct HomescreenRecipient: View {
         
     }
     
+    // Function to extract the elder's weight from HealthKit and store into Firestore
     func getWeight() {
-
+        
         guard let sampleType = HKObjectType.quantityType(forIdentifier: .bodyMass) else {
             return
         }
-
+        // Get weight values. Enter start date and declare sort descriptor
         let startDate = Calendar.current.date(byAdding: .year, value: -2, to: Date())
-
+        
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: Date(), options: .strictEndDate)
-
+        
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
-
+        
         var wval: Double = 0.0
-
+        
+        //  Query to extract the stored samples from HealthKit
         let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: [sortDescriptor]) { (sample, result, error) in
-
-        guard error == nil else{
-
-            return
-        }
-
-           var weightvals: [Double] = []
+            
+            guard error == nil else{
+                
+                return
+            }
+            // Extract values from the sample through HKUnit lb
+            var weightvals: [Double] = []
             let data = result!
             let unit = HKUnit(from: "lb")
             let dateFormator = DateFormatter()
             dateFormator.dateFormat = "dd/MM/yyyy"
-
+            
             print(data)
-
+            
+            // If there is no weight data store  0.0 into Firestore
+            // Check while dispalying to user
             if data.isEmpty{
                 wval = 0.0
-                print("Empty")
             }
+            // If data is available append the values into a list
             else{
                 for index in data{
-
-                let dataval = index as! HKQuantitySample
-                let hr2 = dataval.quantity.doubleValue(for: unit)
-                weightvals.append(hr2)
-                    print("Else block")
+                    
+                    let dataval = index as! HKQuantitySample
+                    let hr2 = dataval.quantity.doubleValue(for: unit)
+                    weightvals.append(hr2)
                 }
-
+                
+                // Format the weight values to 1 decimal place and store most recent record in the variable
                 print("The weight values are: \(weightvals)")
                 wval = weightvals[weightvals.count-1]
                 let wvalString: String = String(format: "%.1f", wval)
                 print(Double(wvalString)!)
                 wval = Double(wvalString)!
-
+                
             }
-
+            
+            // Store the weight value in Firestore
             if let user = Auth.auth().currentUser?.email {
-
-
+                
+                // Search for document Weight and store the value
                 self.db.collection(user).document("Weight").setData([
                     "Weight": wval
                 ]) { err in
@@ -244,67 +244,69 @@ struct HomescreenRecipient: View {
                     } else {
                         print("Successfully saved Weight data to Firestore")
                     }
-
+                    
                 }
             }
-
-
+            
+            
         }
+        // Execute the query
         healthStore.execute(query)
     }
-
+    
+    // Function to extract the elder's height if available
     func getHeight(){
-
+        
         guard let sampleType = HKObjectType.quantityType(forIdentifier: .height) else {
             return
         }
-
+        
         let startDate = Calendar.current.date(byAdding: .year, value: -2, to: Date())
-
+        
         let predicate = HKQuery.predicateForSamples(withStart: startDate, end: Date(), options: .strictEndDate)
-
+        
         let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)
-
+        
         var hval: Double = 0.0
-
+        
         let query = HKSampleQuery(sampleType: sampleType, predicate: predicate, limit: Int(HKObjectQueryNoLimit), sortDescriptors: [sortDescriptor]) { (sample, result, error) in
-
+            
             guard error == nil else{
-
+                
                 return
             }
-
+            
             var heightvals: [Double] = []
             let data = result!
             let unit = HKUnit(from: "ft")
             let dateFormator = DateFormatter()
             dateFormator.dateFormat = "dd/MM/yyyy"
-
+            
             print(data)
             if data.isEmpty{
                 hval = 0.0
             }
-
+            
             else{
-            for index in data{
-
-                let dataval = index as! HKQuantitySample
-                let hr2 = dataval.quantity.doubleValue(for: unit)
-                heightvals.append(hr2)
-
-
-
-            }
+                for index in data{
+                    
+                    let dataval = index as! HKQuantitySample
+                    let hr2 = dataval.quantity.doubleValue(for: unit)
+                    heightvals.append(hr2)
+                    
+                    
+                    
+                }
                 print("The height values are: \(heightvals)")
                 hval = heightvals[heightvals.count-1]
                 let hvalString: String = String(format: "%.3f", hval)
                 print(Double(hvalString)!)
                 hval = Double(hvalString)!
             }
-
+            
             if let user = Auth.auth().currentUser?.email {
-
-
+                
+                
                 self.db.collection(user).document("Height").setData([
                     "Height": hval
                 ]) { err in
@@ -313,18 +315,18 @@ struct HomescreenRecipient: View {
                     } else {
                         print("Successfully saved Height data to Firestore")
                     }
-
+                    
                 }
             }
-
-
-
-
+            
+            
+            
+            
         }
         healthStore.execute(query)
-
-
-
+        
+        
+        
     }
     
     func latestSteps(){
@@ -344,8 +346,8 @@ struct HomescreenRecipient: View {
                 return
             }
             
-//            let data = result
-//            print(data)
+            //            let data = result
+            //            print(data)
             
             var tempsteps: [Double] = []
             var tempdates: [Date] = []
@@ -381,18 +383,18 @@ struct HomescreenRecipient: View {
             var date = Date()
             for i in 0..<tempsteps.count {
                 if i != tempsteps.count-1 {
-                if tempdatesString[i] == tempdatesString[i+1] {
-                    sum+=tempsteps[i]
-                    date = tempdates[i]
-                }
-                else{
-                    sum+=tempsteps[i]
-                    date = tempdates[i]
-                    steps.append(sum)
-                    dates.append(date)
-                    sum = 0
-                    date = Date()
-                }
+                    if tempdatesString[i] == tempdatesString[i+1] {
+                        sum+=tempsteps[i]
+                        date = tempdates[i]
+                    }
+                    else{
+                        sum+=tempsteps[i]
+                        date = tempdates[i]
+                        steps.append(sum)
+                        dates.append(date)
+                        sum = 0
+                        date = Date()
+                    }
                 }
                 else{
                     if tempdatesString[i] == tempdatesString[i-1] {
@@ -411,7 +413,7 @@ struct HomescreenRecipient: View {
                         sum = 0
                         date = Date()
                     }
-                
+                    
                 }
             }
             
@@ -436,7 +438,7 @@ struct HomescreenRecipient: View {
             
             
             
-           
+            
             
         }
         
@@ -461,10 +463,10 @@ struct HomescreenRecipient: View {
                 return
             }
             
-//            let data = result![0] as! HKQuantitySample
-//            let unit = HKUnit(from: "count/min")
-//            let latestHr = data.quantity.doubleValue(for: unit)
-//            print("latest Heart rate: \(latestHr) BPM")
+            //            let data = result![0] as! HKQuantitySample
+            //            let unit = HKUnit(from: "count/min")
+            //            let latestHr = data.quantity.doubleValue(for: unit)
+            //            print("latest Heart rate: \(latestHr) BPM")
             
             var heartRateValues: [Double] = []
             var heartRateDates: [Date] = []
@@ -478,7 +480,7 @@ struct HomescreenRecipient: View {
                 let dataval = index as! HKQuantitySample
                 let hr2 = dataval.quantity.doubleValue(for: unit)
                 heartRateValues.append(hr2)
-//                let startdate = dateFormator.string(from: dataval.startDate)
+                //                let startdate = dateFormator.string(from: dataval.startDate)
                 let startdate = dataval.startDate
                 heartRateDates.append(startdate)
                 
@@ -491,18 +493,18 @@ struct HomescreenRecipient: View {
             if let user = Auth.auth().currentUser?.email {
                 
                 
-//                self.db.collection(user).addDocument(data: [
-//                    "HeartRateValues": heartRateValues,
-//                    "HeartRateDates": heartRateDates
-//                ]) { (error) in
-//
-//                    if let e = error {
-//
-//                        print("Issue saving HeartRate data to Firestore: \(e)")
-//                    } else {
-//                        print("Successfully saved HeartRate data to Firestore")
-//                    }
-//                }
+                //                self.db.collection(user).addDocument(data: [
+                //                    "HeartRateValues": heartRateValues,
+                //                    "HeartRateDates": heartRateDates
+                //                ]) { (error) in
+                //
+                //                    if let e = error {
+                //
+                //                        print("Issue saving HeartRate data to Firestore: \(e)")
+                //                    } else {
+                //                        print("Successfully saved HeartRate data to Firestore")
+                //                    }
+                //                }
                 self.db.collection(user).document("HeartRate").setData([
                     "HeartRateValues": heartRateValues,
                     "HeartRateDates": heartRateDates
@@ -515,14 +517,6 @@ struct HomescreenRecipient: View {
                     
                 }
             }
-            
-//            let dateFormator = DateFormatter()
-//            dateFormator.dateFormat = "dd/MM/yyyy hh:mm s"
-//            let StartDate = dateFormator.string(from: data.startDate)
-            //            let EndDate = dateFormator.string(from: data.endDate)
-            
-//            print("Last Updated on: \(StartDate)")
-            
             
         }
         
