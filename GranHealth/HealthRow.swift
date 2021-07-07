@@ -28,6 +28,7 @@ struct HealthRow: View {
                         
                         // Navigation Link to detail view for each feature
                         NavigationLink(destination: HealthDetail(health: health, show: self.$show, isActive: self.$isActive)){
+                            
                             // Display each feature (item) through HealthItem view
                             HealthItem(health: health, show: self.$show)
                                 .frame(width: 300)
@@ -35,6 +36,7 @@ struct HealthRow: View {
                             
                         }
                         .simultaneousGesture(TapGesture().onEnded{
+                            
                             // Print view active status for debug purposes
                             print(self.isActive)
                             
